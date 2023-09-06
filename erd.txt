@@ -1,0 +1,12 @@
+user
+----
+id integer PK
+username text
+score integer
+
+game
+----
+id integer PK
+score 
+
+
