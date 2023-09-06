@@ -1,0 +1,8 @@
+{
+  "name": "BAD_project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:stunningY1m/BAD_project.git",
+  "author": "Wong Ming Yeung <marcus2288@hotmail.com>",
+  "license": "MIT"
+}
