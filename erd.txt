@@ -1,12 +1,15 @@
-user
+game_record
 ----
 id integer PK
 username text
-score integer
+user_score integer
+game_id integer FK
 
 game
 ----
 id integer PK
-score 
+mode enum
 
 
+
+     
