@@ -231,8 +231,8 @@ window.addEventListener("resize", () => {
 });
 
 async function getSound() {
-  // await fetch(`${VITE_BACKEND_URL}/sound`);
+  // await fetch(`${import.meta.env.VITE_BACKEND_URL}/sound`);
   console.log(`${import.meta.env.VITE_BACKEND_URL}/sound`);
 }
 
-getSound();
+

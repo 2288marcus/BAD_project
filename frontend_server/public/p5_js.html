@@ -5,15 +5,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>p5.js testing</title>
+
+    <script src="js/timer.js"></script>
+
+    <style>
+
+        .d-flex {
+            display: flex;
+            justify-content: center;
+
+        }
+
+        .listen {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+
+            font-size: 20px;
+            margin: 4px 0;
+            cursor: pointer;
+            width: 100vw;
+
+            position: fixed;
+            bottom: 1rem;
+            left: 0;
+
+        }
+
+        #timer {
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .matchStatus {
+            text-align: center;
+            color: #4CAF50;
+            font-size: 3rem;
+
+            position: fixed;
+
+            bottom: 6rem;
+
+
+
+        }
+    </style>
 </head>
 
 <body>
-    
+
     <div class="testing">testing</div>
-    <button onclick="setup()">start</button>
-    <button id="stop">stop</button>
+    <div class="timer-container">
+        <div id="timer">01:00</div>
+    </div>
+
+    <button id="stop" onclick="mic.stop()">stop</button>
+
     <button onclick="noLoop()">no loop</button>
-    <div class="noteShown" style="color: #00FF70; background-color: #000000;">random note: <span id="note"></span></div>
+
+    <div class="noteShown" style="color: #00FF70; background-color: #000000;">
+        random note: <span id="note"></span>
     </div>
     <button id="random">random</button>
     <button id="'play" onclick="playOscillator()">play the note</button>
@@ -22,9 +76,20 @@
     <div class="canvas-container">
 
     </div>
+
+    <button class="listen" onclick="mic.start()">Sing it!</button>
+
     <div class="text hz"></div>
     <div class="text notePlay"></div>
-    
+
+
+    <div class="d-flex">
+        <div class="matchStatus">
+            Ready
+        </div>
+    </div>
+
+
 
     <!-- <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.js"
@@ -40,25 +105,28 @@
         //     setup()
         // })
 
-
         // window.addEventListener("load", () => {
         //     setup()
         // })
 
+        // document.querySelector('#stop').addEventListener('click', () => {
+        //     mic.stop();
+        // })
 
         let mic, fft, osc, playing;
 
         let randomMidi;
         let randomFreq;
 
+        const matched = matchFreq(dominantFreq, randomFreq);
+        console.log("match? :", matched);
 
-        document.querySelector('#stop').addEventListener('click', () => {
-            mic.stop();
-        })
+        document.querySelector('.matchStatus').innerHTML = 123
+
 
 
         function setup() {
-            let cup = createCanvas(288, 288);
+            let cup = createCanvas(40, 40);
             console.log(cup);
 
             // cup.parent("canvas-container");
@@ -67,7 +135,7 @@
 
             // Create an instance of p5.AudioIn for microphone input
             mic = new p5.AudioIn();
-            mic.start();
+
 
             // Create an instance of p5.FFT for frequency analysis
             fft = new p5.FFT();
@@ -77,6 +145,7 @@
             cup.touchEnded(stopOscillator);
 
             osc = new p5.Oscillator('sine');
+
 
 
         }
@@ -97,12 +166,13 @@
             // Display the dominant frequency and note name
             fill('#00FF70');
 
-            document.querySelector('.hz').innerText = ('Dominant Frequency: ' + (dominantFreq ? dominantFreq.toFixed(2) + ' Hz' : 'No signal'), width / 2, height / 2 - 20)
-            document.querySelector('.notePlay').innerText = ('Dominant Frequency: ' + (dominantFreq ? dominantFreq.toFixed(2) + ' Hz' : 'No signal'), width / 2, height / 2 - 20)
-            textAlign(CENTER, CENTER);
-            textSize(18);
+            document.querySelector('.hz').innerText = 'Dominant Frequency: ' + (dominantFreq ? dominantFreq.toFixed(2) + ' Hz' : 'No signal');
+            document.querySelector('.notePlay').innerText = 'Note: ' + (noteName ? noteName : 'Unknown');
+
+            // textAlign(CENTER, CENTER);
+            // textSize(18);
             // text('Dominant Frequency: ' + (dominantFreq ? dominantFreq.toFixed(2) + ' Hz' : 'No signal'), width / 2, height / 2 - 20);
-            text('Note: ' + (noteName ? noteName : 'Unknown'), width / 2, height / 2 + 20);
+            // text('Note: ' + (noteName ? noteName : 'Unknown'), width / 2, height / 2 + 20);
 
         }
 
@@ -123,7 +193,7 @@
             // Convert the index to a frequency value
             const dominantFreq = indexToFreq(maxIndex, getAudioContext().sampleRate, fft.bins);
 
-            console.log('maxIndex:', maxIndex, 'sample rate:', getAudioContext().sampleRate, 'fftBins:', fft.bins)
+            // console.log('#maxIndex:', maxIndex, 'sample rate:', getAudioContext().sampleRate, 'fftBins:', fft.bins)
             // console.log('FFT:', fft)
 
             return dominantFreq;
@@ -148,8 +218,8 @@
         function indexToFreq(index, sampleRate, fftBins) {
             const binWidth = sampleRate / fftBins;
 
-            console.log('bin width:', binWidth);
-            console.log('#return:', (index * binWidth) / 2);
+            // console.log('#bin width:', binWidth);
+            console.log('##return:', (index * binWidth) / 2);
 
             return (index * binWidth) / 2;
         }
@@ -165,7 +235,16 @@
 
         function playOscillator() {
             osc.start();
+
+
+            console.log(playing)
+
+            console.log("ready to call timer....")
+            callTimer();
+
+
             playing = true;
+
 
             randomFreq = midiToFreq(randomMidi);
             osc.freq(randomFreq, 0.1, 0.2);
@@ -177,9 +256,8 @@
 
         function stopOscillator() {
             osc.stop();
-            playing = false;
-        }
 
+        }
 
 
         document.querySelector('#random').addEventListener('click', () => {
@@ -188,15 +266,74 @@
         }
         )
 
+        function matchFreq(dominantFreq, randomFreq) {
+            const noteFrequencies = [
+                130.81,  // C3
+                138.59,  // C#3
+                146.83,  // D3
+                155.56,  // D#3
+                164.81,  // E3
+                174.61,  // F3
+                185.00,  // F#3
+                196.00,  // G3
+                207.65,  // G#3
+                220.00,  // A3
+                233.08,  // A#3
+                246.94,  // B3
+                261.63,  // C4
+                277.18,  // C#4
+                293.66,  // D4
+                311.13,  // D#4
+                329.63,  // E4
+                349.23,  // F4
+                369.99,  // F#4
+                392.00,  // G4
+                415.30,  // G#4
+                440.00,  // A4
+                466.16,  // A#4
+                493.88,  // B4
+                523.25,  // C5
+                554.37,  // C#5
+                587.33,  // D5
+                622.25,  // D#5
+                659.26,  // E5
+                698.46,  // F5
+                739.99,  // F#5
+                783.99,  // G5
+                830.61,  // G#5
+                880.00,  // A5
+                932.33,  // A#5
+                987.77,  // B5
+                1046.50, // C6
+            ];
 
+            const bufferIncrement = 3; // Buffer increment in Hz
 
+            // Find the index of the dominant frequency in the noteFrequencies array
+            const dominantIndex = noteFrequencies.indexOf(dominantFreq);
 
+            // Find the index of the random frequency in the noteFrequencies array
+            const randomIndex = noteFrequencies.indexOf(randomFreq);
+
+            // Calculate the level difference between the dominant and random frequencies
+            const levelDifference = randomIndex - dominantIndex;
+
+            // Calculate the buffer based on the level difference and buffer increment
+            const buffer = Math.abs(levelDifference) * bufferIncrement;
+
+            // Check if the buffer is within the acceptable range for the given level difference
+            const minBuffer = Math.min(dominantFreq, randomFreq) + (Math.floor(Math.abs(levelDifference) / 3) * bufferIncrement);
+            const maxBuffer = Math.max(dominantFreq, randomFreq) + (Math.floor(Math.abs(levelDifference) / 3) * bufferIncrement);
+
+            return randomFreq >= minBuffer && randomFreq <= maxBuffer;
+        }
 
 
 
 
 
     </script>
+
 
 </body>
 
