@@ -1,6 +1,7 @@
 .pyenv
 .env
 node_modules
+xr-domOverlay.js
 package-lock.json
 yarn-lock.json
 # Logs
@@ -27,4 +28,3 @@ dist-ssr
 *.sln
 *.sw?
 cube
-xr-domOverlay.js
