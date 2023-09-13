@@ -8,7 +8,7 @@ game_id integer FK
 game
 ----
 id integer PK
-mode enum
+mode enum ('1Minute','5Cup','Practive','Challenge')
 
 
 
