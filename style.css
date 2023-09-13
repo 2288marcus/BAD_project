@@ -34,3 +34,11 @@ h1 {
 .table-row {
   display: table-row;
 }
+
+h2 {
+  text-align: center;
+}
+
+.about {
+  text-align: center;
+}
