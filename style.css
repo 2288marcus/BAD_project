@@ -25,3 +25,8 @@ h1 {
   padding-top: 5px;
   font-size: 10px;
 }
+
+.btn-row {
+  display: flex;
+  justify-content: space-evenly;
+}
