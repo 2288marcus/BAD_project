@@ -13,10 +13,15 @@ h1 {
   padding-top: 40px;
 }
 
-row {
-  font-size: ;
+.col {
+  display: flex;
+}
+.row {
+  /* border: 2px #ccc solid; */
+  font-size: 20px;
 }
 
-button {
-  float: right;
+.row1 {
+  padding-top: 5px;
+  font-size: 10px;
 }
