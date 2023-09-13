@@ -13,9 +13,9 @@ h1 {
   padding-top: 40px;
 }
 
-.col {
+/* .col {
   display: flex;
-}
+} */
 .row {
   /* border: 2px #ccc solid; */
   font-size: 20px;
@@ -24,4 +24,16 @@ h1 {
 .row1 {
   padding-top: 5px;
   font-size: 10px;
+}
+
+.about {
+  text-align: center;
+}
+
+h2 {
+  text-align: center;
+}
+
+button {
+  align-items: center;
 }
