@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>p5.js testing</title>
+</head>
+
+<body>
+    
+    <div class="testing">testing</div>
+    <button onclick="setup()">start</button>
+    <button id="stop">stop</button>
+    <button onclick="noLoop()">no loop</button>
+    <div class="noteShown" style="color: #00FF70; background-color: #000000;">random note: <span id="note"></span></div>
+    </div>
+    <button id="random">random</button>
+    <button id="'play" onclick="playOscillator()">play the note</button>
+    <button id="'stopPlaying" onclick="stopOscillator()">stop it</button>
+
+    <div class="canvas-container">
+
+    </div>
+    <div class="text hz"></div>
+    <div class="text notePlay"></div>
+    
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.js"
+        integrity="sha512-M7uzkKVt12bO/ClDOwaTk0AUwDPmJzjxri/KQKft2cisI6q3zJ4KxX3IfSQXF9Z6WU6NNW67JAljgWrA4WiiOA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/addons/p5.sound.js"
+        integrity="sha512-TU9AWtV5uUZPX8dbBAH8NQF1tSdigPRRT82vllAQ1Ke28puiqLA6ZVKxtUGlgrH6yWFnkKy+sE6luNEGH9ar0A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <script>
+        // window.addEventListener('click', () => {
+        //     setup()
+        // })
+
+
+        // window.addEventListener("load", () => {
+        //     setup()
+        // })
+
+
+        let mic, fft, osc, playing;
+
+        let randomMidi;
+        let randomFreq;
+
+
+        document.querySelector('#stop').addEventListener('click', () => {
+            mic.stop();
+        })
+
+
+        function setup() {
+            let cup = createCanvas(288, 288);
+            console.log(cup);
+
+            // cup.parent("canvas-container");
+
+            background(0);
+
+            // Create an instance of p5.AudioIn for microphone input
+            mic = new p5.AudioIn();
+            mic.start();
+
+            // Create an instance of p5.FFT for frequency analysis
+            fft = new p5.FFT();
+            fft.setInput(mic, 1024); // Set the FFT size to 1024
+
+            cup.touchStarted(playOscillator);
+            cup.touchEnded(stopOscillator);
+
+            osc = new p5.Oscillator('sine');
+
+
+        }
+
+
+        function draw() {
+            background(0);
+
+            // Analyze the audio input and get the dominant frequency
+            const dominantFreq = getDominantFrequency();
+
+            // Convert the dominant frequency to MIDI note number
+            const midiNote = freqToMidi(dominantFreq);
+
+            // Convert the MIDI note number to note name
+            const noteName = midiToNoteName(midiNote);
+
+            // Display the dominant frequency and note name
+            fill('#00FF70');
+
+            document.querySelector('.hz').innerText = ('Dominant Frequency: ' + (dominantFreq ? dominantFreq.toFixed(2) + ' Hz' : 'No signal'), width / 2, height / 2 - 20)
+            document.querySelector('.notePlay').innerText = ('Dominant Frequency: ' + (dominantFreq ? dominantFreq.toFixed(2) + ' Hz' : 'No signal'), width / 2, height / 2 - 20)
+            textAlign(CENTER, CENTER);
+            textSize(18);
+            // text('Dominant Frequency: ' + (dominantFreq ? dominantFreq.toFixed(2) + ' Hz' : 'No signal'), width / 2, height / 2 - 20);
+            text('Note: ' + (noteName ? noteName : 'Unknown'), width / 2, height / 2 + 20);
+
+        }
+
+        function getDominantFrequency() {
+            const spectrum = fft.analyze(); // Get the frequency spectrum (Returns an array of amplitude values (between 0 and 255) across the frequency spectrum)
+            // console.log('spectrum:', spectrum);
+
+            // Find the index of the highest magnitude in the spectrum
+            let maxIndex = 0;
+            let maxValue = 0;
+            for (let i = 0; i < spectrum.length; i++) {
+                if (spectrum[i] > maxValue) {
+                    maxValue = spectrum[i];
+                    maxIndex = i;
+                }
+            }
+
+            // Convert the index to a frequency value
+            const dominantFreq = indexToFreq(maxIndex, getAudioContext().sampleRate, fft.bins);
+
+            console.log('maxIndex:', maxIndex, 'sample rate:', getAudioContext().sampleRate, 'fftBins:', fft.bins)
+            // console.log('FFT:', fft)
+
+            return dominantFreq;
+        }
+
+        function freqToMidi(frequency) {
+            return p5.prototype.freqToMidi(frequency);
+        }
+
+        function midiToNoteName(midiNote) {
+            const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+            const octave = Math.floor(midiNote / 12) - 1;
+            const noteIndex = midiNote % 12;
+
+            return notes[noteIndex] + octave;
+        }
+
+        function midiToFreq(midiNote) {
+            return p5.prototype.midiToFreq(midiNote);
+        }
+
+        function indexToFreq(index, sampleRate, fftBins) {
+            const binWidth = sampleRate / fftBins;
+
+            console.log('bin width:', binWidth);
+            console.log('#return:', (index * binWidth) / 2);
+
+            return (index * binWidth) / 2;
+        }
+
+
+        function randomNote() {
+            randomMidi = Math.floor(Math.random() * (84 - 48)) + 48;
+
+            return midiToNoteName(randomMidi);
+
+        }
+
+
+        function playOscillator() {
+            osc.start();
+            playing = true;
+
+            randomFreq = midiToFreq(randomMidi);
+            osc.freq(randomFreq, 0.1, 0.2);
+            // osc.freq(440, 0.1, 0.2 );
+
+            // osc.amp(1, 0.1, 0.7)
+
+        }
+
+        function stopOscillator() {
+            osc.stop();
+            playing = false;
+        }
+
+
+
+        document.querySelector('#random').addEventListener('click', () => {
+            document.querySelector('#note').innerText = randomNote()
+
+        }
+        )
+
+
+
+
+
+
+
+
+
+    </script>
+
+</body>
+
+</html>
