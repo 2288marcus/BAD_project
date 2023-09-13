@@ -23,6 +23,10 @@ gltfLoader.setDRACOLoader(dracoLoader); // 將DRACOLoader分配給GLTFLoader
 // 預先加載模型
 gltfLoader.load("/models/banana.gltf", onLoad);
 gltfLoader.load("/models/cup.gltf", onLoad);
+gltfLoader.load("/models/Cow.gltf", onLoad);
+gltfLoader.load("/models/Horse.gltf", onLoad);
+// gltfLoader.load("/models/LittlestTokyo.glb", onLoad);
+// gltfLoader.load("/models/uploads_files_2530657_ShotCups.glb");
 
 function onLoad(gltf) {
   loadedModels[gltf.scene.name] = gltf.scene; // 將加載的模型存儲到loadedModels對象中
