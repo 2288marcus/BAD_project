@@ -1,0 +1,22 @@
+.container {
+  padding-top: 60px;
+}
+
+body {
+  background-color: #24241a;
+  /* font-family: Georgia, Times, serif; */
+  color: white;
+}
+
+h1 {
+  text-align: center;
+  padding-top: 40px;
+}
+
+row {
+  font-size: ;
+}
+
+button {
+  float: right;
+}
