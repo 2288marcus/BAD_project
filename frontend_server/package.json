@@ -1,0 +1,20 @@
+{
+  "name": "webxr-ar",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "vite --host 0.0.0.0 --port 8080",
+    "dev": "vite",
+    "vite": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^3.2.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "populate-env": "^2.0.0",
+    "three": "^0.147.0"
+  }
+}
