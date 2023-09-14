@@ -234,5 +234,3 @@ async function getSound() {
   // await fetch(`${import.meta.env.VITE_BACKEND_URL}/sound`);
   console.log(`${import.meta.env.VITE_BACKEND_URL}/sound`);
 }
-
-
