@@ -8,6 +8,8 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.get("/game_record", () => {});
+
 app.use((req, res, next) =>
   next(
     new HttpError(

@@ -231,6 +231,6 @@ window.addEventListener("resize", () => {
   renderer.setPixelRatio(window.devicePixelRatio);
 });
 
-// async function getSound() {
+// async function () {
 //   await fetch(`${env.BACKEND_URL}/sound`);
 // }
