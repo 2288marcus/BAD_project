@@ -59,7 +59,7 @@
 
     <div class="testing">testing</div>
     <div class="timer-container">
-        <div id="timer">01:00</div>
+        <div id="timer">01:00:000</div>
     </div>
 
     <button id="stop" onclick="mic.stop()">stop</button>
@@ -117,12 +117,6 @@
 
         let randomMidi;
         let randomFreq;
-
-        const matched = matchFreq(dominantFreq, randomFreq);
-        console.log("match? :", matched);
-
-        document.querySelector('.matchStatus').innerHTML = 123
-
 
 
         function setup() {
@@ -261,12 +255,15 @@
 
 
         document.querySelector('#random').addEventListener('click', () => {
-            document.querySelector('#note').innerText = randomNote()
-
+            console.log("to random");
+            let currentNote = randomNote()
+            document.querySelector('#note').innerText = currentNote
         }
         )
 
         function matchFreq(dominantFreq, randomFreq) {
+            console.log("called matchFreq()");
+
             const noteFrequencies = [
                 130.81,  // C3
                 138.59,  // C#3
@@ -327,6 +324,11 @@
 
             return randomFreq >= minBuffer && randomFreq <= maxBuffer;
         }
+
+        const matched = matchFreq(dominantFreq, randomFreq);
+        console.log("match? :", matched);
+
+        document.querySelector('.matchStatus').innerHTML = 123
 
 
 

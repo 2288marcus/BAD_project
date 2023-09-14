@@ -30,7 +30,7 @@ function countdownTimer() {
   let totalTime = timeInMinutes * 60 * 1000;
   let endTime = Date.now() + totalTime;
 
-  const countdownInterval = setInterval(updateCountdown, 1000);
+  const countdownInterval = setInterval(updateCountdown, 1);
 
   function updateCountdown() {
     const currentTime = Date.now();
@@ -38,10 +38,11 @@ function countdownTimer() {
 
     const minutes = Math.floor(remainingTime / 60000);
     const seconds = Math.floor((remainingTime % 60000) / 1000);
+    const milliseconds = remainingTime % 1000;
 
     countdownElement.textContent = `${minutes
       .toString()
-      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}:${milliseconds.toString().padStart(3, "0")}`; 
 
     if (remainingTime === 0) {
       clearInterval(countdownInterval);
