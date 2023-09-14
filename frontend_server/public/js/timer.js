@@ -47,8 +47,8 @@ function countdownTimer() {
     if (remainingTime === 0) {
       clearInterval(countdownInterval);
       
-      playing = false;
-      console.log("END GAME!", playing);
+      gamePlaying = false;
+      console.log("END GAME!", gamePlaying);
 
       console.log("Countdown finished");
     }
@@ -56,8 +56,8 @@ function countdownTimer() {
 }
 
 function callTimer() {
-  if (playing) {
-    console.log("i am already playing");
+  if (gamePlaying) {
+    console.log("already playing");
     return
   }
   countdownTimer();
