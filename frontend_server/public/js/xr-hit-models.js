@@ -7,146 +7,10 @@ import { AnimationMixer } from "https://unpkg.com/three@0.120.1/src/animation/An
 let loadedModels = [];
 let hitTestSource = null;
 let hitTestSourceRequested = false;
-let isRemove = false;
+let glass = {};
 
-// function createGltf() {
-//   let gltfLoader = new GLTFLoader();
-//   gltfLoader.load("/public/models/wineglass.glb", onLoad);
-// }
-
-let gltfModel; // 全局变量，用于存储加载的模型
-
-function deleteGltf(gltfModel) {
-  if ((isRemove = true)) scene.remove(gltfModel); // 假设场景对象为scene
-  gltfModel = null;
-}
-
-function createGltf() {
-  // 如果已经存在模型，则先删除
-  if (gltfModel) {
-    scene.remove(gltfModel); // 假设场景对象为scene
-    gltfModel = null;
-  }
-
-  let gltfLoader = new GLTFLoader();
-  gltfLoader.load("/public/models/wineglass.glb", onLoad);
-}
-
-createGltf();
-function onLoad(gltf) {
-  // 将模型添加到loadedModels数组中
-  loadedModels.push(gltf.scene);
-  gltf.scene.position.set(0, -3, -10);
-  scene.add(camera); // 將相機添加到場景中
-  gltf.scene.scale.set(0.5, 0.5, 0.5); // 調整模型的大小
-  scene.add(gltf.scene);
-
-  // 创建AnimationMixer并将模型的动画添加到混合器中
-  const mixer = new AnimationMixer(gltf.scene);
-  gltf.animations.forEach((clip) => {
-    const action = mixer.clipAction(clip);
-    action.loop = THREE.LoopOnce; // 设置动画循环为一次
-    action.play();
-  });
-  document.querySelector("#play").addEventListener("click", () => animate());
-  document.querySelector("#load").addEventListener("click", () => onLoad(gltf));
-  document
-    .querySelector("#remove")
-    .addEventListener("click", () => deleteGltf(gltfModel));
-  // 遍历模型的子对象，将其材质设置为玻璃材质
-  gltf.scene.traverse((child) => {
-    if (child.isMesh) {
-      const glassMaterial = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0xffffff), // 设置为白色
-        transparent: true,
-        opacity: 0.5,
-        roughness: 0.5,
-        metalness: 1.0,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.1,
-        envMapIntensity: 1.0,
-      });
-      child.castShadow = true;
-      child.receiveShadow = true;
-      child.material = glassMaterial;
-    }
-    // animate();
-  });
-
-  // 更新混合器的时间
-  function animate() {
-    requestAnimationFrame(animate);
-
-    // // // 检查动画是否超过了一次动画的总时长
-    const duration = mixer.time;
-    const totalDuration = gltf.animations.reduce(
-      (total, clip) => total + clip.duration,
-      0
-    );
-    if (duration >= totalDuration) {
-      mixer.stopAllAction(); // 暂停所有动画
-    } else {
-      mixer.update(0.01); // 可以调整时间步长以控制动画速度
-      renderer.render(scene, camera);
-    }
-    isRemove = true;
-    deleteGltf(gltf);
-  }
-
-  // function childAnimate() {
-  //   requestAnimationFrame(animate);
-  //   scene.traverse((child) => {
-  //     if (child.isMesh) {
-  //       const mixer = child.userData.mixer;
-  //       const animations = child.userData.animations;
-
-  //       const duration = mixer.time;
-  //       const totalDuration = animations.reduce(
-  //         (total, clip) => total + clip.duration,
-  //         0
-  //       );
-
-  //       if (duration >= totalDuration) {
-  //         mixer.stopAllAction();
-  //       } else {
-  //         mixer.update(0.01);
-  //         renderer.render(scene, camera);
-  //       }
-  //     }
-  //   });
-  // }
-
-  //   // 添加光源
-  const light1 = new THREE.PointLight(0xffffff, 0.4);
-  light1.position.set(2, 2, 0); //右上
-  scene.add(light1);
-  const light2 = new THREE.PointLight(0xffffff, 0.4);
-  light2.position.set(-2, 2, 0); // 左上
-  scene.add(light2);
-  const light3 = new THREE.PointLight(0xffffff, 0.5);
-  light3.position.set(0, 3, 3); // 正前上
-  scene.add(light3);
-  const light4 = new THREE.PointLight(0xffffff, 0.5);
-  light2.position.set(0, 4, 0); // 正上
-  scene.add(light4);
-  const light5 = new THREE.PointLight(0xffffff, 0.5);
-  light3.position.set(0, 0, -5); // 後
-  scene.add(light5);
-  // 针对产生阴影的光源进行设置
-  light1.castShadow = true;
-  light2.castShadow = true;
-  light3.castShadow = true;
-  light4.castShadow = true;
-  light5.castShadow = true;
-
-  //   // 针对接收阴影的模型进行设置
-  //   gltf.scene.traverse((child) => {
-  //     if (child.isMesh) {
-  //       child.castShadow = true;
-  //       child.receiveShadow = true;
-  //     }
-  //   });
-}
+window.glass = glass;
+let firstModel;
 
 // 创建Three.js场景
 const scene = new THREE.Scene();
@@ -195,20 +59,116 @@ document.body.appendChild(
 );
 
 let controller = renderer.xr.getController(0);
-// controller.addEventListener("select", onSelect);
+controller.addEventListener("select", onSelect);
 scene.add(controller);
+
+function setupLight() {
+  // 添加光源
+  addLight(0.4, [2, 2, 0]); // 右上
+  addLight(0.4, [-2, 2, 0]); // 左上
+  addLight(0.5, [0, 3, 3]); // 正前上
+  addLight(0.5, [0, 4, 0]); // 正上
+  addLight(0.5, [0, 0, -5]); // 後
+}
+setupLight();
+
+function addLight(intensity, [x, y, z]) {
+  const light = new THREE.PointLight(0xffffff, intensity);
+  light.castShadow = true; // 针对产生阴影的光源进行设置
+  light.position.set(x, y, z);
+  scene.add(light);
+}
+
+function createGltf() {
+  let gltfLoader = new GLTFLoader();
+  gltfLoader.load("/public/models/wineglass.glb", (gltf) => {
+    glass.gltf = gltf;
+    glass.animation = gltf.animations[0];
+    glass.model = gltf.scene;
+
+    // 遍历模型的子对象，将其材质设置为玻璃材质
+    glass.model.traverse((child) => {
+      if (child.isMesh) {
+        const glassMaterial = new THREE.MeshPhysicalMaterial({
+          color: new THREE.Color(0xffffff), // 设置为白色
+          transparent: true,
+          opacity: 0.5,
+          roughness: 0.5,
+          metalness: 1.0,
+          clearcoat: 1.0,
+          clearcoatRoughness: 0.1,
+          envMapIntensity: 1.0,
+        });
+        child.castShadow = true;
+        child.receiveShadow = true;
+        child.material = glassMaterial;
+      }
+    });
+
+    // addFirstGlassToScene
+    firstModel = glass.model.clone();
+    firstModel.position.set(0, -3, -10);
+    firstModel.scale.set(0.5, 0.5, 0.5); // 調整模型的大小
+    firstModel.rotation.y = Math.floor(Math.random() * 6) + 1;
+    firstModel.name = "glass-model-first";
+    addGlassModelToScene(firstModel);
+  });
+}
+
+createGltf();
+
+function addGlassModelToScene(model) {
+  loadedModels.push(model);
+  scene.add(model);
+
+  // 创建AnimationMixer并将模型的动画添加到混合器中
+  const mixer = new AnimationMixer(model);
+  model.mixer = mixer;
+  const action = mixer.clipAction(glass.animation);
+  action.loop = THREE.LoopOnce; // 设置动画循环为一次
+  // action.loop = THREE.LoopRepeat; // 设置动画循环为無限次
+  action.play();
+
+  // 更新混合器的时间
+  function animate() {
+    // 检查动画是否超过了一次动画的总时长
+    let step = 0.01;
+    if (mixer.time + step < glass.animation.duration) {
+      mixer.update(0.01); // 可以调整时间步长以控制动画速度
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+  }
+  animate();
+}
+
+window.addEventListener("click", () => {
+  if (firstModel) {
+    firstModel.mixer.stopAllAction(); // 暂停所有动画
+    scene.remove(firstModel);
+    firstModel = null;
+    countdownTimer();
+  }
+});
 
 function onSelect() {
   if (reticle.visible) {
-    // 添加新的模型
-    let randomIndex = Math.floor(Math.random() * loadedModels.length);
-    let model = loadedModels[randomIndex].clone();
-    model.position.setFromMatrixPosition(reticle.matrix);
-    model.scale.set(0.02, 0.02, 0.02); // 調整模型的大小
-    model.name = "model";
-    scene.add(model);
+    addMoreGlass();
   }
 }
+
+function addMoreGlass() {
+  // 添加新的模型
+  let model = glass.model.clone();
+  model.position.setFromMatrixPosition(reticle.matrix);
+  model.scale.set(0.02, 0.02, 0.02); // 調整模型的大小
+  model.name = "glass-model-" + (loadedModels.length + 1);
+  model.rotation.y = Math.floor(Math.random() * 6) + 1;
+  addGlassModelToScene(model);
+  counterSpan.textContent++;
+}
+
+window.addMoreGlass = addMoreGlass;
 
 // 渲染循环函数，用于更新场景和相机的渲染
 renderer.setAnimationLoop(render);
@@ -225,13 +185,11 @@ function render(timestamp, frame) {
 
       // 根据AR会话的状态显示或隐藏播放按钮
       if (isARSessionStarted) {
-        document.getElementById("play").style.display = "none";
-        document.getElementById("load").style.display = "none";
-        document.getElementById("remove").style.display = "none";
+        // document.getElementById("counterSpan").style.display = "none";
+        // document.getElementById("timer").style.display = "none";
       } else {
-        document.getElementById("play").style.display = "block";
-        document.getElementById("load").style.display = "block";
-        document.getElementById("remove").style.display = "block";
+        document.getElementById("counterSpan").style.display = "block";
+        document.getElementById("timer").style.display = "block";
       }
     }
 
@@ -265,13 +223,6 @@ function render(timestamp, frame) {
       }
     }
   }
-  // // console.log(scene.children)
-  // scene.children.forEach((object) => {
-  //   if (object.name === "model") {
-  //     object.rotation.y = 3;
-  //   }
-  // });
-
   // 渲染场景
   renderer.render(scene, camera);
 }
