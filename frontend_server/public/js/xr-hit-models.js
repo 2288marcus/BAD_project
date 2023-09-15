@@ -1,19 +1,42 @@
-import * as THREE from "three";
-import { ARButton } from "three/examples/jsm/webxr/ARButton";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { AnimationMixer } from "three/src/animation/AnimationMixer";
+// import * as THREE from "three";
+import * as THREE from "https://unpkg.com/three@0.120.1/build/three.module.js";
+import { ARButton } from "https://unpkg.com/three@0.120.1/examples/jsm/webxr/ARButton.js";
+import { GLTFLoader } from "https://unpkg.com/three@0.120.1/examples/jsm/loaders/GLTFLoader.js";
+import { AnimationMixer } from "https://unpkg.com/three@0.120.1/src/animation/AnimationMixer.js";
 
 let loadedModels = [];
 let hitTestSource = null;
 let hitTestSourceRequested = false;
+let isRemove = false;
 
-let gltfLoader = new GLTFLoader();
-gltfLoader.load("/models/wineglass.glb", onLoad);
+// function createGltf() {
+//   let gltfLoader = new GLTFLoader();
+//   gltfLoader.load("/public/models/wineglass.glb", onLoad);
+// }
 
+let gltfModel; // 全局变量，用于存储加载的模型
+
+function deleteGltf(gltfModel) {
+  if ((isRemove = true)) scene.remove(gltfModel); // 假设场景对象为scene
+  gltfModel = null;
+}
+
+function createGltf() {
+  // 如果已经存在模型，则先删除
+  if (gltfModel) {
+    scene.remove(gltfModel); // 假设场景对象为scene
+    gltfModel = null;
+  }
+
+  let gltfLoader = new GLTFLoader();
+  gltfLoader.load("/public/models/wineglass.glb", onLoad);
+}
+
+createGltf();
 function onLoad(gltf) {
   // 将模型添加到loadedModels数组中
   loadedModels.push(gltf.scene);
-  gltf.scene.position.set(0, -6, -10);
+  gltf.scene.position.set(0, -3, -10);
   scene.add(camera); // 將相機添加到場景中
   gltf.scene.scale.set(0.5, 0.5, 0.5); // 調整模型的大小
   scene.add(gltf.scene);
@@ -25,27 +48,11 @@ function onLoad(gltf) {
     action.loop = THREE.LoopOnce; // 设置动画循环为一次
     action.play();
   });
-
-  // 更新混合器的时间
-  function animate() {
-    requestAnimationFrame(animate);
-
-    // 检查动画是否超过了一次动画的总时长
-    const duration = mixer.time;
-    const totalDuration = gltf.animations.reduce(
-      (total, clip) => total + clip.duration,
-      0
-    );
-    if (duration >= totalDuration) {
-      mixer.stopAllAction(); // 暂停所有动画
-    } else {
-      mixer.update(0.01); // 可以调整时间步长以控制动画速度
-      renderer.render(scene, camera);
-    }
-  }
-
   document.querySelector("#play").addEventListener("click", () => animate());
-
+  document.querySelector("#load").addEventListener("click", () => onLoad(gltf));
+  document
+    .querySelector("#remove")
+    .addEventListener("click", () => deleteGltf(gltfModel));
   // 遍历模型的子对象，将其材质设置为玻璃材质
   gltf.scene.traverse((child) => {
     if (child.isMesh) {
@@ -59,10 +66,55 @@ function onLoad(gltf) {
         clearcoatRoughness: 0.1,
         envMapIntensity: 1.0,
       });
-
+      child.castShadow = true;
+      child.receiveShadow = true;
       child.material = glassMaterial;
     }
+    // animate();
   });
+
+  // 更新混合器的时间
+  function animate() {
+    requestAnimationFrame(animate);
+
+    // // // 检查动画是否超过了一次动画的总时长
+    const duration = mixer.time;
+    const totalDuration = gltf.animations.reduce(
+      (total, clip) => total + clip.duration,
+      0
+    );
+    if (duration >= totalDuration) {
+      mixer.stopAllAction(); // 暂停所有动画
+    } else {
+      mixer.update(0.01); // 可以调整时间步长以控制动画速度
+      renderer.render(scene, camera);
+    }
+    isRemove = true;
+    deleteGltf(gltf);
+  }
+
+  // function childAnimate() {
+  //   requestAnimationFrame(animate);
+  //   scene.traverse((child) => {
+  //     if (child.isMesh) {
+  //       const mixer = child.userData.mixer;
+  //       const animations = child.userData.animations;
+
+  //       const duration = mixer.time;
+  //       const totalDuration = animations.reduce(
+  //         (total, clip) => total + clip.duration,
+  //         0
+  //       );
+
+  //       if (duration >= totalDuration) {
+  //         mixer.stopAllAction();
+  //       } else {
+  //         mixer.update(0.01);
+  //         renderer.render(scene, camera);
+  //       }
+  //     }
+  //   });
+  // }
 
   //   // 添加光源
   const light1 = new THREE.PointLight(0xffffff, 0.4);
@@ -87,14 +139,15 @@ function onLoad(gltf) {
   light4.castShadow = true;
   light5.castShadow = true;
 
-  // 针对接收阴影的模型进行设置
-  gltf.scene.traverse((child) => {
-    if (child.isMesh) {
-      child.castShadow = true;
-      child.receiveShadow = true;
-    }
-  });
+  //   // 针对接收阴影的模型进行设置
+  //   gltf.scene.traverse((child) => {
+  //     if (child.isMesh) {
+  //       child.castShadow = true;
+  //       child.receiveShadow = true;
+  //     }
+  //   });
 }
+
 // 创建Three.js场景
 const scene = new THREE.Scene();
 // 定义视口的大小
@@ -141,21 +194,21 @@ document.body.appendChild(
   ARButton.createButton(renderer, { requiredFeatures: ["hit-test"] })
 );
 
-// let controller = renderer.xr.getController(0);
-// // controller.addEventListener("select", onSelect);
-// scene.add(controller);
+let controller = renderer.xr.getController(0);
+// controller.addEventListener("select", onSelect);
+scene.add(controller);
 
-// function onSelect() {
-//   if (reticle.visible) {
-//     // 添加新的模型
-//     let randomIndex = Math.floor(Math.random() * loadedModels.length);
-//     let model = loadedModels[randomIndex].clone();
-//     model.position.setFromMatrixPosition(reticle.matrix);
-//     model.scale.set(0.02, 0.02, 0.02); // 調整模型的大小
-//     model.name = "model";
-//     scene.add(model);
-//   }
-// }
+function onSelect() {
+  if (reticle.visible) {
+    // 添加新的模型
+    let randomIndex = Math.floor(Math.random() * loadedModels.length);
+    let model = loadedModels[randomIndex].clone();
+    model.position.setFromMatrixPosition(reticle.matrix);
+    model.scale.set(0.02, 0.02, 0.02); // 調整模型的大小
+    model.name = "model";
+    scene.add(model);
+  }
+}
 
 // 渲染循环函数，用于更新场景和相机的渲染
 renderer.setAnimationLoop(render);
@@ -173,8 +226,12 @@ function render(timestamp, frame) {
       // 根据AR会话的状态显示或隐藏播放按钮
       if (isARSessionStarted) {
         document.getElementById("play").style.display = "none";
+        document.getElementById("load").style.display = "none";
+        document.getElementById("remove").style.display = "none";
       } else {
         document.getElementById("play").style.display = "block";
+        document.getElementById("load").style.display = "block";
+        document.getElementById("remove").style.display = "block";
       }
     }
 
