@@ -65,7 +65,7 @@ function setupLight() {
   // 添加光源
   addLight(0.4, [2, 2, 0]); // 右上
   addLight(0.4, [-2, 2, 0]); // 左上
-  addLight(0.5, [0, 3, 3]); // 正前上
+  addLight(0.3, [0, 3, 3]); // 正前上
   addLight(0.5, [0, 4, 0]); // 正上
   addLight(0.5, [0, 0, -5]); // 後
 }
@@ -140,7 +140,7 @@ function addGlassModelToScene(model) {
   }
   animate();
 }
-
+document.querySelector("#play").addEventListener("click", () => animate());
 window.addEventListener("click", () => {
   if (firstModel) {
     firstModel.mixer.stopAllAction(); // 暂停所有动画
@@ -189,6 +189,8 @@ function render(timestamp, frame) {
       } else {
         document.getElementById("counterSpan").style.display = "block";
         document.getElementById("timer").style.display = "block";
+        document.getElementById("play").style.display = "block";
+        document.getElementById("create").style.display = "block";
       }
     }
 
