@@ -6,11 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>p5.js testing</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Cormorant:wght@300&display=swap"
+        rel="stylesheet">
 
 
     <script src="js/timer.js"></script>
 
     <style>
+        body {
+            background-color: #29253a;
+            color: rgb(255, 245, 158);
+
+        }
+
         .d-flex {
             display: flex;
             justify-content: center;
@@ -35,8 +45,39 @@
         }
 
         #timer {
+            /* position: fixed;
+            top: 2rem; */
+
             font-size: 24px;
             text-align: center;
+            color: #fffef9;
+            text-shadow: -4px 2px 2px rgba(54, 63, 49, 1);
+
+            font-family: 'Black Ops One';
+
+        }
+
+        #restart {
+            text-align: center;
+            color: #4caf50;
+
+            font-family: 'Black Ops One';
+
+
+        }
+
+        #cup-counter {
+            position: fixed;
+            top: 0.5rem;
+            right: 0.5rem;
+            text-align: center;
+            font-size: 19px;
+            color: #fffef9;
+            text-shadow: -4px 2px 2px rgba(54, 63, 49, 1);
+
+            font-family: 'Black Ops One', cursive;
+
+
         }
 
         .matchStatus {
@@ -52,26 +93,75 @@
         button {
             margin: 0.25rem;
         }
+
+        #match-note {
+            font-size: 6rem;
+            color: #4caf50;
+            position: fixed;
+            top: 17rem;
+            text-align: center;
+
+            visibility: hidden;
+            animation: fade-in-out 3s linear;
+
+
+        }
+
+        .fade {
+            animation: fade-in-out 10s linear;
+
+        }
+
+        @keyframes fade-in-out {
+            0% {
+                opacity: 0;
+                visibility: visible;
+            }
+
+            25% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                display: none;
+            }
+        }
     </style>
 </head>
 
 <body>
 
     <div class="testing">testing</div>
-    <div class="timer-container">
+
+    <div class="d-flex">
         <div id="timer">01:00:00</div>
+        <div id="cup-counter">0 Cup</div>
     </div>
+    <div id="restart" onclick="restart()"> Restart</div>
+
 
     <button id="stop" onclick="mic.stop()">stop</button>
     <button onclick="noLoop()">no loop</button>
     <button id="'play" onclick="playOscillator()">play the note</button>
     <button id="'stopPlaying" onclick="stopOscillator()">stop it</button>
+    <button onclick="matched()">testing: match</button>
+    <button onclick="endGame()">testing: end game</button>
+    <button onclick="restart()">testing: restart</button>
+
 
     <div class="noteShown" style="color: #00ff70; background-color: #000000">
-        random note: <span id="note"></span>
+        random note: <span id="randNote"></span>
+    </div>
+    <div class="noteShown" style="color: #00ff70; background-color: #000000">
+        random freq: <span id="randFreq"></span>
     </div>
 
-    <button id="random">random</button>
+    <button id="randomLor">random</button>
 
     <div class="canvas-container"></div>
 
@@ -79,9 +169,14 @@
     <div class="text notePlay"></div>
 
     <div class="d-flex">
+        <div id="match-note">F6</div>
+    </div>
+
+    <div class="d-flex">
         <div class="matchStatus">Ready</div>
     </div>
     <button class="listen" onclick="mic.start()">Sing it!</button>
+    <!-- onclick="mic.start()" -->
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.js"
@@ -90,6 +185,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/addons/p5.sound.js"
         integrity="sha512-TU9AWtV5uUZPX8dbBAH8NQF1tSdigPRRT82vllAQ1Ke28puiqLA6ZVKxtUGlgrH6yWFnkKy+sE6luNEGH9ar0A=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"
+        integrity="sha512-DWtDo/6AXxH1t9p7GCWqmC4XTVK/eje94XTV6QYB39rGllLN8Tr3izDf6lkmebgqRnYh4wtSFm4CvBoA9SrdpA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.js"
+        integrity="sha512-TU9AWtV5uUZPX8dbBAH8NQF1tSdigPRRT82vllAQ1Ke28puiqLA6ZVKxtUGlgrH6yWFnkKy+sE6luNEGH9ar0A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <script>
 
@@ -106,43 +211,67 @@
         //     mic.stop();
         // })
 
-        let mic, fft, osc, polySynth, gamePlaying;
+        let mic, fft, osc, polySynth;
+
+        let gamePlaying = false;
+        let firstNote = true;
 
         let randomMidi;
         let randomFreq;
+        let randomNote;
+
+        let dominantFreq;
+        let isMatched;
+
+
+        let cupCounter = 0;
+        let matchedNotes = [];
 
         function setup() {
             let cup = createCanvas(40, 40);
-            console.log(cup);
+            console.log("cup:", cup);
 
-            // cup.parent(".canvas-container");
-            // .parent(document.querySelector("#canvas")
-            background(0);
+            console.log(document.querySelector('.canvas-container'))
+            console.log(cup)
+            // document.querySelector('.canvas-container').appendChild(cup.canvas)
+            cup.parent(document.querySelector('.canvas-container'));
+
+            // cup.parent(document.querySelector("#canvas"));
+
+            background("#4CAF50");
 
             mic = new p5.AudioIn();
+            console.log("mic:", mic);
+
 
             fft = new p5.FFT();
-            fft.setInput(mic, 1024);
+            fft.setInput(mic, 2048);
 
             cup.touchStarted(playOscillator);
             cup.touchEnded(stopOscillator);
 
             osc = new p5.Oscillator("sine");
             polySynth = new p5.PolySynth();
+
+
+            document.querySelector(".listen").addEventListener("click", () => {
+                mic.start();
+            })
+
         }
 
         function draw() {
-            background(0);
+            background("#4CAF50");
 
-            const dominantFreq = getDominantFrequency();
+            dominantFreq = getDominantFrequency();
 
             const midi = freqToMidi(dominantFreq);
 
             const noteName = midiToNote(midi);
 
-            const freq = midiToFreq(midi)
+            const frequency = midiToFreq(midi);
 
-            const isMatched = matchFreq(dominantFreq, randomFreq);
+            isMatched = matchFreq(dominantFreq, randomFreq);
 
             document.querySelector(".hz").innerText =
                 "Dominant Frequency: " +
@@ -150,18 +279,8 @@
             document.querySelector(".notePlay").innerText =
                 "Note: " + (noteName ? noteName : "Unknown");
 
+            checkGamePlaying();
 
-            if (gamePlaying) {
-                console.log(isMatched);
-                document.querySelector(".matchStatus").innerText = isMatched;
-
-            }
-
-            // fill("#00FF70");
-            // textAlign(CENTER, CENTER);
-            // textSize(18);
-            // text('Dominant Frequency: ' + (dominantFreq ? dominantFreq.toFixed(2) + ' Hz' : 'No signal'), width / 2, height / 2 - 20);
-            // text('Note: ' + (noteName ? noteName : 'Unknown'), width / 2, height / 2 + 20);
         }
 
         function getDominantFrequency() {
@@ -179,7 +298,7 @@
             }
 
             // Convert the index to a frequency value
-            const dominantFreq = indexToFreq(
+            const convertedFreq = indexToFreq(
                 maxIndex,
                 getAudioContext().sampleRate,
                 fft.bins
@@ -188,14 +307,14 @@
             // console.log('#maxIndex:', maxIndex, 'sample rate:', getAudioContext().sampleRate, 'fftBins:', fft.bins)
             // console.log('FFT:', fft)
 
-            return dominantFreq;
+            return convertedFreq;
         }
 
         function freqToMidi(frequency) {
             return p5.prototype.freqToMidi(frequency);
         }
 
-        function midiToNote(midiNote) {
+        function midiToNote(midi) {
             const notes = [
                 "C",
                 "C#",
@@ -210,43 +329,47 @@
                 "A#",
                 "B",
             ];
-            const octave = Math.floor(midiNote / 12) - 1;
-            const noteIndex = midiNote % 12;
+            const octave = Math.floor(midi / 12) - 1;
+            const noteIndex = midi % 12;
 
             return notes[noteIndex] + octave;
         }
 
-        function midiToFreq(midiNote) {
-            return p5.prototype.midiToFreq(midiNote);
+        function midiToFreq(midi) {
+            return p5.prototype.midiToFreq(midi);
         }
 
         function indexToFreq(index, sampleRate, fftBins) {
             const binWidth = sampleRate / fftBins;
 
             // console.log('#bin width:', binWidth);
-            console.log("*domFreq*:", (index * binWidth) / 2);
+            console.log("*domFreq*:", ((index * binWidth) / 2) * 1.007);
 
-            return (index * binWidth) / 2;
+            return ((index * binWidth) / 2) * 1.007;
         }
 
-        function randomNote() {
+        function genRandomNote() {
             randomMidi = Math.floor(Math.random() * (84 - 48)) + 48;
+            randomNote = midiToNote(randomMidi);
+            randomFreq = midiToFreq(randomMidi);
 
-            return midiToNote(randomMidi);
+            return randomNote;
         }
 
         function playOscillator() {
-            osc.start();
+            if (firstNote) {
+                genRandomNote();
+                callTimer();
+                console.log("Start the game, 1 st round and gen new!");
+                firstNote = false;
+            }
 
-            console.log(gamePlaying);
+            console.log("play the note :", randomNote, ",game status:", gamePlaying);
 
-            console.log("ready to call timer....");
-            callTimer();
+            // mic.stop();
 
-            gamePlaying = true;
-
-            randomFreq = freq
             osc.freq(randomFreq, 0.1, 0.2);
+            osc.start();
 
         }
 
@@ -254,81 +377,269 @@
             osc.stop();
         }
 
-        document.querySelector("#random").addEventListener("click", () => {
-            document.querySelector("#note").innerText = randomNote();
+        document.querySelector("#randomLor").addEventListener("click", () => {
+            genRandomNote();
+            document.querySelector("#randNote").innerText = randomNote;
+            document.querySelector("#randFreq").innerText = randomFreq.toFixed(2);
+
         });
 
+
+        const noteFrequencies = {}
+        noteFrequencies[130.81] = 'C3'
+        noteFrequencies[138.59] = 'C#3'
+        noteFrequencies[146.83] = 'D3'
+        noteFrequencies[155.56] = 'D#3'
+        noteFrequencies[164.81] = 'E3'
+        noteFrequencies[174.61] = 'F3'
+        noteFrequencies[185.0] = 'F#3'
+        noteFrequencies[196.0] = 'G3'
+        noteFrequencies[207.65] = 'G#3'
+        noteFrequencies[220.0] = 'A3'
+        noteFrequencies[233.08] = 'A#3'
+        noteFrequencies[246.94] = 'B3'
+        noteFrequencies[261.63] = 'C4'
+        noteFrequencies[277.18] = 'C#4'
+        noteFrequencies[293.66] = 'D4'
+        noteFrequencies[311.13] = 'D#4'
+        noteFrequencies[329.63] = 'E4'
+        noteFrequencies[349.23] = 'F4'
+        noteFrequencies[369.99] = 'F#4'
+        noteFrequencies[392.0] = 'G4'
+        noteFrequencies[415.3] = 'G#4'
+        noteFrequencies[440.0] = 'A4'
+        noteFrequencies[466.16] = 'A#4'
+        noteFrequencies[493.88] = 'B4'
+        noteFrequencies[523.25] = 'C5'
+        noteFrequencies[554.37] = 'C#5'
+        noteFrequencies[587.33] = 'D5'
+        noteFrequencies[622.25] = 'D#5'
+        noteFrequencies[659.26] = 'E5'
+        noteFrequencies[698.46] = 'F5'
+        noteFrequencies[739.99] = 'F#5'
+        noteFrequencies[783.99] = 'G5'
+        noteFrequencies[830.61] = 'G#5'
+        noteFrequencies[880.0] = 'A5'
+        noteFrequencies[932.33] = 'A#5'
+        noteFrequencies[987.77] = 'B5'
+        noteFrequencies[1046.5] = 'C6'
+
+
         function matchFreq(dominantFreq, randomFreq) {
-            try {
-                const noteFrequencies = [
-                    130.81, // C3
-                    138.59, // C#3 
-                    146.83, // D3
-                    155.56, // D#3
-                    164.81, // E3
-                    174.61, // F3
-                    185.0, // F#3
-                    196.0, // G3
-                    207.65, // G#3
-                    220.0, // A3
-                    233.08, // A#3
-                    246.94, // B3
-                    261.63, // C4
-                    277.18, // C#4
-                    293.66, // D4
-                    311.13, // D#4
-                    329.63, // E4
-                    349.23, // F4
-                    369.99, // F#4
-                    392.0, // G4
-                    415.3, // G#4
-                    440.0, // A4
-                    466.16, // A#4
-                    493.88, // B4
-                    523.25, // C5
-                    554.37, // C#5
-                    587.33, // D5
-                    622.25, // D#5
-                    659.26, // E5
-                    698.46, // F5
-                    739.99, // F#5
-                    783.99, // G5
-                    830.61, // G#5
-                    880.0, // A5
-                    932.33, // A#5
-                    987.77, // B5
-                    1046.5, // C6
-                ];
 
-                let bufferRange = 0.02;
-                let thresholdRange = 0.05;
+            let bufferRange = 0.02;
 
-                for (let i = 0; i < noteFrequencies.length; i++) {
-                    const lowerThresholdBound = noteFrequencies[i] * (1 - thresholdRange);
-                    const upperThresholdBound = noteFrequencies[i] * (1 + thresholdRange);
-                    // const lowerBufferBound = noteFrequencies[i] * (1 - bufferRange);
-                    // const upperBufferBound = noteFrequencies[i] * (1 + bufferRange);
+            let thresholdRange = 0.05
+            let lowerThresholdBound = randomFreq * (1 - thresholdRange);
+            let upperThresholdBound = randomFreq * (1 + thresholdRange);
 
-                    if (dominantFreq >= lowerThresholdBound && dominantFreq <= upperThresholdBound) {
-                        const distance = Math.abs(dominantFreq - randomFreq);
-                        if (distance <= bufferRange * randomFreq) {
-                            return "Perfect !!";
-                        } else {
-                            return "Good try ~";
-                        }
-                    }
-                    return "Poor...";
+            let distance = Math.abs(dominantFreq - randomFreq)
+
+            if (dominantFreq >= lowerThresholdBound && dominantFreq <= upperThresholdBound) {
+                if (distance <= bufferRange * randomFreq) {
+
+                    matched();
+
+                    return "Perfect !!";
+                } else {
+                    return "Good try ~";
                 }
-            } catch (error) {
-                console.error("An error occurred in matchFreq():", error);
-                return "Error";
-
+            } else {
+                return "Poor...";
             }
+
         }
+
+
+        // function matchFreq(dominantFreq, randomFreq) {
+        //     try {
+        //         const noteFrequencies = [
+        //             130.81, // C3
+        //             138.59, // C#3 
+        //             146.83, // D3
+        //             155.56, // D#3
+        //             164.81, // E3
+        //             174.61, // F3
+        //             185.0, // F#3
+        //             196.0, // G3
+        //             207.65, // G#3
+        //             220.0, // A3
+        //             233.08, // A#3
+        //             246.94, // B3
+        //             261.63, // C4
+        //             277.18, // C#4
+        //             293.66, // D4
+        //             311.13, // D#4
+        //             329.63, // E4
+        //             349.23, // F4
+        //             369.99, // F#4
+        //             392.0, // G4
+        //             415.3, // G#4
+        //             440.0, // A4
+        //             466.16, // A#4
+        //             493.88, // B4
+        //             523.25, // C5
+        //             554.37, // C#5
+        //             587.33, // D5
+        //             622.25, // D#5
+        //             659.26, // E5
+        //             698.46, // F5
+        //             739.99, // F#5
+        //             783.99, // G5
+        //             830.61, // G#5
+        //             880.0, // A5
+        //             932.33, // A#5
+        //             987.77, // B5
+        //             1046.5, // C6
+        //         ];
+
+        //         let bufferRange = 0.02;
+        //         let thresholdRange = 0.05;
+
+        //         for (let i = 0; i < noteFrequencies.length; i++) {
+        //             const lowerThresholdBound = noteFrequencies[i] * (1 - thresholdRange);
+        //             const upperThresholdBound = noteFrequencies[i] * (1 + thresholdRange);
+        //             // const lowerBufferBound = noteFrequencies[i] * (1 - bufferRange);
+        //             // const upperBufferBound = noteFrequencies[i] * (1 + bufferRange);
+
+        //             console.log("lowerThresholdBound = " + lowerThresholdBound, "upperThresholdBound = " + upperThresholdBound);
+
+        //             if (dominantFreq >= lowerThresholdBound && dominantFreq <= upperThresholdBound) {
+        //                 let distance = Math.abs(dominantFreq - randomFreq);
+        //                 if (distance <= bufferRange * randomFreq) {
+
+        //                     matched();
+
+        //                     return "Perfect !!";
+        //                 } else {
+        //                     return "Good try ~";
+        //                 }
+        //             }
+
+        //             //TODO matching logic...+1??
+        //             return "Poor...";
+        //         }
+        //     } catch (error) {
+        //         console.error("An error occurred in matchFreq():", error);
+        //         return "Error";
+
+        //     }
+        // }
 
         // console.log("want to fit ~ noteFreq:", noteFrequencies[i],
         //                     '\n', "randomFreq:", randomFreq,
         //                     "\n", "range:", lowerBound + "to ",upperBound);
+
+        function checkGamePlaying() {
+
+            if (gamePlaying) {
+
+                matchFreq(dominantFreq, randomFreq);
+                document.querySelector(".matchStatus").innerText = isMatched;
+
+            } else {
+                mic.stop();
+
+                document.querySelector(".matchStatus").innerText = "Ready?...";
+
+            }
+        }
+
+        // function startGame() {
+        //     gamePlaying = true;
+        //     loop();
+        // }
+
+        function endGame() {
+            mic.stop();
+            noLoop();
+
+            console.log('total cups;', cupCounter);
+
+            gamePlaying = false;
+
+            playerForm();
+
+
+        }
+
+        // document.querySelector(".listen").addEventListener("click", function () {
+        //     console.log("'sing it' clicked!");
+        //     mic.start();
+
+        //     let a = getAudioContext()
+        //     console.log(a);
+
+        //     console.log("start mic:",mic);
+        //     console.log();
+        //     console.log("mic started");
+        // });
+
+        function matched() {
+            mic.stop();
+
+            cupCounter += 1;
+            if (cupCounter === 1) {
+                document.querySelector("#cup-counter").innerText = `Cup: \n ${cupCounter}`;
+            } else {
+                document.querySelector("#cup-counter").innerText = `Cups: \n ${cupCounter}`;
+            }
+
+            // matchedNotes.push(randomNote);
+
+            document.querySelector("#match-note").innerText = randomNote
+            document.querySelector("#match-note").style.visibility = 'visible'
+            // document.querySelector("#match-note").classList.add('fade')
+            setTimeout(() => {
+                document.querySelector("#match-note").style.visibility = 'hidden';
+            }, 3000);
+
+            //TODO show matching status
+
+            // document.querySelector(".matchStatus").innerText = "You are perfect!"
+
+
+
+            genRandomNote();
+
+        }
+
+        async function playerForm() {
+            const { value: username } = await Swal.fire({
+                title: 'Wow, show it to the world!',
+                input: 'text',
+                inputLabel: `Your score: ${cupCounter} Cups`,
+                inputPlaceholder: 'Enter your username',
+                preConfirm: (inputValue) => {
+                    if (!inputValue) {
+                        Swal.showValidationMessage(`Let's tell your name to the world!!!`);
+                    }
+                    return inputValue;
+                },
+            });
+
+            if (username) {
+                Swal.fire(`Name: ${username}\n Score: ${cupCounter} Cups`);
+            }
+        }
+
+        function restart() {
+            console.log("RESTART");
+            firstNote = true;
+            gamePlaying = false;
+
+            cupCounter = 0;
+            document.querySelector("#cup-counter").innerText = `Cup: \n ${cupCounter}`;
+
+            matchedNotes = [];
+
+
+        }
+
+
+
+
+
 
 
     </script>
