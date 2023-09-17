@@ -19,18 +19,16 @@ function updateTimer() {
     .toString()
     .padStart(2, "0")}`;
 
-  document.getElementById("timer").textContent = formattedTime;
+  document.querySelector("#timer").textContent = formattedTime;
 }
 
 function countdownTimer() {
   let timeInMinutes = 1;
 
-  const countdownElement = document.querySelector("#timer");
-
   let totalTime = timeInMinutes * 60 * 1000;
   let endTime = Date.now() + totalTime;
 
-  const countdownInterval = setInterval(updateCountdown, 1);
+  let countdownInterval = setInterval(updateCountdown, 1);
 
   function updateCountdown() {
     const currentTime = Date.now();
@@ -38,28 +36,44 @@ function countdownTimer() {
 
     const minutes = Math.floor(remainingTime / 60000);
     const seconds = Math.floor((remainingTime % 60000) / 1000);
-    const milliseconds = remainingTime % 1000;
+    const milliseconds = Math.floor((remainingTime % 1000) / 10);
 
-    countdownElement.textContent = `${minutes
+    document.querySelector("#timer").innerText = `${minutes
       .toString()
-      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}:${milliseconds.toString().padStart(3, "0")}`; 
-
-    if (remainingTime === 0) {
-      clearInterval(countdownInterval);
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}:${milliseconds
+      .toString()
+      .padStart(2, "0")}`;
+    
+      document.querySelector("#timer").style.color = "#fffef9";
+    
       
-      playing = false;
-      console.log("END GAME!", playing);
-
-      console.log("Countdown finished");
+    if (remainingTime <= 10000 ) {
+      document.querySelector("#timer").style.color = "orange";
     }
+    
+    if (remainingTime <= 5000 ) {
+      document.querySelector("#timer").style.color = "red";
+    }
+    
+    if (remainingTime === 0) {
+      endGame();
+      clearInterval(countdownInterval);
+      document.querySelector("#timer").textContent = "Game Over!";
+
+      console.log("END GAME!", gamePlaying);
+      console.log("Countdown finished");
+    }      
   }
+  
 }
 
+
 function callTimer() {
-  if (playing) {
-    console.log("i am already playing");
-    return
+  if (gamePlaying) {
+    console.log("already playing, timer continued counting");
+    return;
   }
   countdownTimer();
-  console.log("timer called!")
+  console.log("timer called!");
+  gamePlaying = true;
 }

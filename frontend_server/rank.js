@@ -39,6 +39,7 @@ console.log(formateTime(100));
 
 function createTableElm(data, tableName) {
   const table = document.createElement("table");
+<<<<<<< HEAD
   const table2 = document.createElement("table2");
 
   // Create table header
@@ -61,10 +62,24 @@ function createTableElm(data, tableName) {
   }
   thead.appendChild(headerRow);
   thead.classList.add("thead");
+=======
+  table.classList.add("rank-container");
+
+  // Create table header
+  const thead = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+  if (tableName === "cup") {
+    headerRow.innerHTML = "<th>No</th><th>User Name</th><th>Time Spending</th>";
+  } else {
+    headerRow.innerHTML = "<th>No</th><th>User Name</th><th>User score</th>";
+  }
+  thead.appendChild(headerRow);
+>>>>>>> b3fea18166f3293e61fa174e7faf5455531d01a8
   table.appendChild(thead);
 
   // Create table body
   const tbody = document.createElement("tbody");
+<<<<<<< HEAD
   tbody.classList.add("rank-container");
   data.forEach((item) => {
     const row = document.createElement("tr");
@@ -73,6 +88,14 @@ function createTableElm(data, tableName) {
       row.innerHTML = `<td>${item.no}</td><td>${item.time_spending} (${item.username})</td>`;
     } else {
       row.innerHTML = `<td>${item.no}</td><td>${item.user_score} (${item.username})</td>`;
+=======
+  data.forEach((item) => {
+    const row = document.createElement("tr");
+    if (tableName === "cup") {
+      row.innerHTML = `<td>${item.no}</td><td>${item.username}</td><td>${item.time_spending}</td>`;
+    } else {
+      row.innerHTML = `<td>${item.no}</td><td>${item.username}</td><td>${item.user_score}</td>`;
+>>>>>>> b3fea18166f3293e61fa174e7faf5455531d01a8
     }
 
     tbody.appendChild(row);
