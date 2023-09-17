@@ -15,14 +15,12 @@
         Back
       </button></a
     >
-    <script src="https://cdn.jsdelivr.net/npm/data-template@1.7/base.js"></script>
-    <!-- <script> renderTemplate(header)</script> -->
     <h1>RANK</h1>
     <div
       class="container text-center"
       style="display: flex; justify-content: space-evenly"
     >
-      <div class="table-row">
+      <!-- <div class="table-row">
         <div>No.</div>
         <div>1</div>
         <div>2</div>
@@ -34,44 +32,26 @@
         <div>8</div>
         <div>9</div>
         <div>10</div>
-      </div>
-      <div class="table-row">
-        <div>1 Minute</div>
-        <div>99cups (marcus)</div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-      <div class="table-row">
-      <div>5 Cups</div>
-        <div>5s (marcus)</div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-      <!-- <div class="table-row" >
-      <div>Challenge</div>
-        <div>marcus</div>
-        <div>2</div>
-        <div>3</div>
-        <div>4</div>
-        <div>5</div>
-        <div>6</div>
-        <div>7</div>
-        <div>8</div>
-        <div>9</div>
-        <div>10</div>
-    </div> -->
-
-  </body>
+      </div> -->
+      <!-- <div
+        class="table-row"
+        id="articleList"
+        data-template="article"
+        data-bind="fiveCupdata"
+      >5 cup</div> -->
+      <template data-name="article">
+        <div class="article">
+          <div>username</div>
+          <div data-text="username"></div>
+          <div>score</div>
+          <div data-text="user_score"></div>
+          <div>time</div>
+          <div data-text="time_spending"></div>
+          <br /><br /><br /></div
+      ></template>
+      <script type="module" src="../rank.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/data-template@1.7/base.js"></script>
+</body>
 </html>
+
+

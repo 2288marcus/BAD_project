@@ -8,6 +8,7 @@ body {
   width: 100%;
   overflow: hidden;
   background-color: #000;
+  color: aliceblue;
 }
 
 #overlay-content {
@@ -15,6 +16,10 @@ body {
   left: calc(50% - 7rem);
   /* Comment display none for dom overlay to work */
   /* display: none; */
+}
+
+.rank-container {
+  background-color: red;
 }
 
 /* #container {

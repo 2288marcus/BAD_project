@@ -2,7 +2,6 @@ import * as THREE from "three";
 import { ARButton } from "three/examples/jsm/webxr/ARButton";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { AnimationMixer } from "three/src/animation/AnimationMixer";
-// import { env } from "../env";
 
 let loadedModels = [];
 let hitTestSource = null;
@@ -231,6 +230,7 @@ window.addEventListener("resize", () => {
   renderer.setPixelRatio(window.devicePixelRatio);
 });
 
-// async function () {
-//   await fetch(`${env.BACKEND_URL}/sound`);
-// }
+async function getSound() {
+  // await fetch(`${import.meta.env.VITE_BACKEND_URL}/sound`);
+  console.log(`${import.meta.env.VITE_BACKEND_URL}/sound`);
+}
