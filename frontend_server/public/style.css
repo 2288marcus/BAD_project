@@ -41,14 +41,8 @@ h2 {
 
 .about {
   text-align: center;
-  padding: 10%;
 }
 
-p {
-  font-size: 10px;
-}
-
-#timer {
-  text-align: center;
-  font-size: 50px;
+h3 {
+  padding-top: 30px;
 }

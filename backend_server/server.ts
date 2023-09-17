@@ -1,12 +1,23 @@
 import express, { ErrorRequestHandler } from "express";
 import { print } from "listening-on";
 import { HttpError } from "./http.error";
+import { knex } from "./db";
+import { GameService } from "./game.service";
+import { GameController } from "./game.controller";
+import cors from "cors";
 
 let app = express();
 
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+
+let gameService = new GameService(knex);
+let gameController = new GameController(gameService);
+app.use(gameController.router);
+
+app.get("/game_record", () => {});
 
 app.use((req, res, next) =>
   next(
