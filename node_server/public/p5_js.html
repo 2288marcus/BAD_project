@@ -131,6 +131,11 @@
                 display: none;
             }
         }
+
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+        }
     </style>
 </head>
 
@@ -145,7 +150,7 @@
     <div id="restart" onclick="restart()"> Restart</div>
 
 
-    <button id="stop" onclick="mic.stop()">stop</button>
+    <button id="stop" onclick="stopMic()">stop</button>
     <button onclick="noLoop()">no loop</button>
     <button id="'play" onclick="playOscillator()">play the note</button>
     <button id="'stopPlaying" onclick="stopOscillator()">stop it</button>
@@ -197,19 +202,6 @@
 
     <script>
 
-
-        // window.addEventListener('click', () => {
-        //     setup()
-        // })
-
-        // window.addEventListener("load", () => {
-        //     setup()
-        // })
-
-        // document.querySelector('#stop').addEventListener('click', () => {
-        //     mic.stop();
-        // })
-
         let mic, fft, osc, polySynth;
 
         let gamePlaying = false;
@@ -221,10 +213,13 @@
 
         let dominantFreq;
         let isMatched;
-        let timer
+
+        let timer;
 
         let cupCounter = 0;
         let matchedNotes = [];
+
+        let matchStatusBar = document.querySelector(".matchStatus")
 
         function setup() {
             let cup = createCanvas(40, 40);
@@ -251,6 +246,8 @@
 
             osc = new p5.Oscillator("sine");
             polySynth = new p5.PolySynth();
+
+            disableMic()
 
 
 
@@ -287,10 +284,26 @@
 
         }
 
-        function disableMic() {
-            document.querySelector('.listen').style.backgroundColor = '#515751';
-            document.querySelector(".matchStatus").innerText = "Ready?...";
+        function stopMic() {
+            if (gamePlaying) {
+                matchStatusBar.innerText = "Ready?...";
+                mic.stop();
+                return
+            } else {
+                mic.stop();
+                matchStatusBar.innerText = "Ready?...";
 
+            }
+
+        }
+
+        function disableMic() {
+
+            matchStatusBar.innerText = "Touch and Listen to the Glass!";
+            matchStatusBar.style.fontSize = '1.25rem';
+            matchStatusBar.style.backgroundColor = '#FFFFFF';
+
+            document.querySelector('.listen').style.backgroundColor = '#515751';
 
 
         }
@@ -379,7 +392,7 @@
 
             console.log("play the note :", randomNote, "frq:", randomFreq, ",game status:", gamePlaying);
 
-            mic.stop();
+            stopMic();
 
             osc.freq(randomFreq, 0.1, 0.2);
             osc.start();
@@ -477,8 +490,6 @@
 
                 matchFreq(dominantFreq, randomFreq);
 
-                console.log("@@@@@@@@@@@@", { isMatched });
-
                 if (isMatched === "Perfect !!") {
                     console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@", isMatched);
                     // document.querySelector(".matchStatus").innerText = "Perfect !!";
@@ -486,12 +497,15 @@
                 }
 
 
-                document.querySelector(".matchStatus").innerText = isMatched;
+                matchStatusBar.style.backgroundColor = '';
+                matchStatusBar.style.fontSize = '3rem';
+
+                matchStatusBar.innerText = isMatched;
 
             } else {
-                mic.stop();
+                stopMic()
 
-                document.querySelector(".matchStatus").innerText = "Ready?...";
+                // document.querySelector(".matchStatus").innerText = "Ready?...";
 
             }
         }
@@ -502,7 +516,7 @@
         // }
 
         function endGame() {
-            mic.stop();
+            stopMic();
             noLoop();
 
             console.log('total cups;', cupCounter, 'all matched notes:', matchedNotes);
@@ -523,7 +537,7 @@
         // });
 
         function matched() {
-            mic.stop();
+            stopMic();
             console.log("mic stop ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             cupCounter += 1;
             if (cupCounter === 1) {
@@ -584,6 +598,8 @@
             document.querySelector("#cup-counter").innerText = `Cup: \n ${cupCounter}`;
 
             matchedNotes = [];
+
+            disableMic()
 
             console.log("RESTART", "firstNote true?", firstNote, "gamePlaying false?", gamePlaying);
 
