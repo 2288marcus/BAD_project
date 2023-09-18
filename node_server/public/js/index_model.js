@@ -35,6 +35,8 @@ function onLoad(gltf) {
   // 设置模型的材质
   model.traverse((child) => {
     if (child.isMesh) {
+      child.castShadow = true;
+      child.receiveShadow = true;
       child.material = glassMaterial;
     }
   });
