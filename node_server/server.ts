@@ -4,7 +4,7 @@ import { HttpError } from "./http.error";
 import { knex } from "./db";
 import { GameService } from "./game.service";
 import { GameController } from "./game.controller";
-import cors from "cors";
+// import cors from "cors";
 
 let app = express();
 
@@ -16,7 +16,7 @@ app.use(
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors());
+// app.use(cors());
 
 let gameService = new GameService(knex);
 let gameController = new GameController(gameService);

@@ -18,9 +18,17 @@
     ></script>
     <link rel="stylesheet" href="style.css" />
     <style>
+      .line {
+        border-left: 1px solid #9a9a9a;
+      }
       th,
       td {
-        background-color: lightcoral;
+        border-left-width: 100px;
+        border-color: black;
+        text-align: center;
+      }
+      td {
+        border-left-width: 10px;
       }
     </style>
   </head>
@@ -31,12 +39,12 @@
         <tr>
           <th rowspan="2">Rank</th>
           <th colspan="2">5 Cup</th>
-          <th colspan="2">1 Min</th>
+          <th colspan="2">1 Minute</th>
         </tr>
         <tr>
           <th>Time</th>
           <th>Player</th>
-          <th>Score</th>
+          <th>Glass</th>
           <th>Player</th>
         </tr>
       </thead>
@@ -45,9 +53,9 @@
     <template data-name="row">
       <tr>
         <td data-text="no">1</td>
-        <td data-text="time_spending_value">1:00</td>
+        <td class="line" data-text="time_spending_value">1:00</td>
         <td data-text="time_spending_player">Alice</td>
-        <td data-text="score_value">123</td>
+        <td class="line" data-text="score_value">123</td>
         <td data-text="score_player">Bob</td>
       </tr>
     </template>
