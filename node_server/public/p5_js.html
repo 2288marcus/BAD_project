@@ -101,34 +101,28 @@
             top: 17rem;
             text-align: center;
 
-            visibility: hidden;
-            animation: fade-in-out 3s linear;
+            opacity: 0;
 
 
         }
 
         .fade {
-            animation: fade-in-out 10s linear;
-
+            animation: fade-in-out 3s
         }
 
         @keyframes fade-in-out {
             0% {
                 opacity: 0;
-                visibility: visible;
+
             }
 
-            25% {
-                opacity: 1;
-            }
-
-            90% {
+            50% {
                 opacity: 1;
             }
 
             100% {
                 opacity: 0;
-                display: none;
+
             }
         }
 
@@ -150,10 +144,10 @@
     <div id="restart" onclick="restart()"> Restart</div>
 
 
-    <button id="stop" onclick="stopMic()">stop</button>
+    <!-- <button id="stop" onclick="stopMic()">stop</button>
     <button onclick="noLoop()">no loop</button>
     <button id="'play" onclick="playOscillator()">play the note</button>
-    <button id="'stopPlaying" onclick="stopOscillator()">stop it</button>
+    <button id="'stopPlaying" onclick="stopOscillator()">stop it</button> -->
     <button onclick="matched()">testing: match</button>
     <button onclick="endGame()">testing: end game</button>
     <button onclick="restart()">testing: restart</button>
@@ -263,6 +257,7 @@
             const noteName = midiToNote(midi);
 
             const frequency = midiToFreq(midi);
+
             if (dominantFreq) {
                 isMatched = matchFreq(dominantFreq, randomFreq);
             }
@@ -274,7 +269,7 @@
             document.querySelector(".notePlay").innerText =
                 "Note: " + (noteName ? noteName : "Unknown");
 
-            checkGamePlaying();
+            // checkGamePlaying();
 
         }
 
@@ -282,26 +277,31 @@
             mic.start();
             console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~start mic");
 
+            checkGamePlaying()
+
         }
 
         function stopMic() {
-            if (gamePlaying) {
-                matchStatusBar.innerText = "Ready?...";
-                mic.stop();
-                return
-            } else {
-                mic.stop();
-                matchStatusBar.innerText = "Ready?...";
+            mic.stop();
 
-            }
+            console.log("///////call stopMic");
+
+            matchStatusBar.innerText = "Ready?...";
+            matchStatusBar.style.fontSize = '3rem';
+
+            document.querySelector('.listen').style.backgroundColor = '#4caf50'
+
 
         }
 
+
         function disableMic() {
+
+            mic.stop();
 
             matchStatusBar.innerText = "Touch and Listen to the Glass!";
             matchStatusBar.style.fontSize = '1.25rem';
-            matchStatusBar.style.backgroundColor = '#FFFFFF';
+            // matchStatusBar.style.backgroundColor = '#FFFFFF';
 
             document.querySelector('.listen').style.backgroundColor = '#515751';
 
@@ -369,9 +369,9 @@
             const binWidth = sampleRate / fftBins;
 
             // console.log('#bin width:', binWidth);
-            console.log("*domFreq*:", ((index * binWidth) / 2) * 1.007);
+            console.log("*domFreq*:", ((index * binWidth) / 2));
 
-            return ((index * binWidth) / 2) * 1.007;
+            return ((index * binWidth) / 2);
         }
 
         function genRandomNote() {
@@ -384,6 +384,7 @@
 
         function playOscillator() {
             if (firstNote) {
+                // disableMic();
                 genRandomNote();
                 timer = callTimer();
                 console.log("Start the game, 1 st round and gen new!");
@@ -396,8 +397,6 @@
 
             osc.freq(randomFreq, 0.1, 0.2);
             osc.start();
-
-            document.querySelector('.listen').style.backgroundColor = '#4caf50'
 
         }
 
@@ -497,23 +496,17 @@
                 }
 
 
-                matchStatusBar.style.backgroundColor = '';
+                // matchStatusBar.style.backgroundColor = '';
                 matchStatusBar.style.fontSize = '3rem';
-
-                matchStatusBar.innerText = isMatched;
+                matchStatusBar.innerText = isMatched ? isMatched : "Ready?..."
 
             } else {
-                stopMic()
-
-                // document.querySelector(".matchStatus").innerText = "Ready?...";
+                matchStatusBar.innerText = "Touch and Listen to the Glass!";
+                matchStatusBar.style.fontSize = '1.25rem';
 
             }
         }
 
-        // function startGame() {
-        //     gamePlaying = true;
-        //     loop();
-        // }
 
         function endGame() {
             stopMic();
@@ -537,8 +530,8 @@
         // });
 
         function matched() {
-            stopMic();
-            console.log("mic stop ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            disableMic();
+            console.log("mic disable ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             cupCounter += 1;
             if (cupCounter === 1) {
                 document.querySelector("#cup-counter").innerText = `Cup: \n ${cupCounter}`;
@@ -549,20 +542,24 @@
             matchedNotes.push(randomNote);
 
             document.querySelector("#match-note").innerText = randomNote
-            document.querySelector("#match-note").style.visibility = 'visible'
-            // document.querySelector("#match-note").classList.add('fade')
+            document.querySelector("#match-note").classList.add('fade')
+
             setTimeout(() => {
-                document.querySelector("#match-note").style.visibility = 'hidden';
+                document.querySelector("#match-note").classList.remove('fade')
+
             }, 3000);
 
-            //TODO show matching status
+            matchStatusBar.innerText = "You are perfect!";
+            matchStatusBar.style.fontSize = '2rem';
 
-            document.querySelector(".matchStatus").innerText = "You are perfect!"
-
+            setTimeout(() => {
+                matchStatusBar.innerText = "Touch and Listen to the Glass!";
+                matchStatusBar.style.fontSize = '1.25rem';
+            }, 3000);
 
 
             genRandomNote();
-            disableMic();
+
 
         }
 
