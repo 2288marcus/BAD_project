@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js testing</title>
+
+    <script src="js/timer.js"></script>
+
+    <style>
+      .d-flex {
+        display: flex;
+        justify-content: center;
+      }
+
+      .listen {
+        background-color: #4caf50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+
+        font-size: 20px;
+        margin: 4px 0;
+        cursor: pointer;
+        width: 100vw;
+
+        position: fixed;
+        bottom: 1rem;
+        left: 0;
+      }
+
+      #timer {
+        font-size: 24px;
+        text-align: center;
+      }
+
+      .matchStatus {
+        text-align: center;
+        color: #4caf50;
+        font-size: 3rem;
+
+        position: fixed;
+
+        bottom: 6rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="testing">testing</div>
+    <div class="timer-container">
+        <div id="timer">01:00:000</div>
+    </div>
+    <button>start</button>
+
+    <button id="stop" onclick="mic.stop()">stop</button>
+
+    <button onclick="noLoop()">no loop</button>
+
+    <div class="noteShown" style="color: #00ff70; background-color: #000000">
+      random note: <span id="note"></span>
+    </div>
+    <button id="random">random</button>
+    <button id="'play" onclick="playOscillator()">play the note</button>
+    <button id="'stopPlaying" onclick="stopOscillator()">stop it</button>
+
+    <div class="canvas-container"></div>
+
+    <button class="listen" onclick="mic.start()">Sing it!</button>
+
+    <div class="text hz"></div>
+    <div class="text notePlay"></div>
+
+    <div class="d-flex">
+      <div class="matchStatus">Ready</div>
+    </div>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script> -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.js"
+      integrity="sha512-M7uzkKVt12bO/ClDOwaTk0AUwDPmJzjxri/KQKft2cisI6q3zJ4KxX3IfSQXF9Z6WU6NNW67JAljgWrA4WiiOA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/addons/p5.sound.js"
+      integrity="sha512-TU9AWtV5uUZPX8dbBAH8NQF1tSdigPRRT82vllAQ1Ke28puiqLA6ZVKxtUGlgrH6yWFnkKy+sE6luNEGH9ar0A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script>
+      // window.addEventListener('click', () => {
+      //     setup()
+      // })
+
+      // window.addEventListener("load", () => {
+      //     setup()
+      // })
+
+      // document.querySelector('#stop').addEventListener('click', () => {
+      //     mic.stop();
+      // })
+
+      let mic, fft, osc, playing;
+
+      let randomMidi;
+      let randomFreq;
+
+      const matched = matchFreq(dominantFreq, randomFreq);
+      console.log("match? :", matched);
+
+      document.querySelector(".matchStatus").innerHTML = 123;
+
+      function setup() {
+        let cup = createCanvas(40, 40);
+        console.log(cup);
+
+        // cup.parent("canvas-container");
+
+        background(0);
+
+        // Create an instance of p5.AudioIn for microphone input
+        mic = new p5.AudioIn();
+
+        // Create an instance of p5.FFT for frequency analysis
+        fft = new p5.FFT();
+        fft.setInput(mic, 1024); // Set the FFT size to 1024
+
+        cup.touchStarted(playOscillator);
+        cup.touchEnded(stopOscillator);
+
+        osc = new p5.Oscillator("sine");
+      }
+
+      function draw() {
+        background(0);
+
+        // Analyze the audio input and get the dominant frequency
+        const dominantFreq = getDominantFrequency();
+
+        // Convert the dominant frequency to MIDI note number
+        const midiNote = freqToMidi(dominantFreq);
+
+        // Convert the MIDI note number to note name
+        const noteName = midiToNoteName(midiNote);
+
+        // Display the dominant frequency and note name
+        fill("#00FF70");
+
+        document.querySelector(".hz").innerText =
+          "Dominant Frequency: " +
+          (dominantFreq ? dominantFreq.toFixed(2) + " Hz" : "No signal");
+        document.querySelector(".notePlay").innerText =
+          "Note: " + (noteName ? noteName : "Unknown");
+
+        // textAlign(CENTER, CENTER);
+        // textSize(18);
+        // text('Dominant Frequency: ' + (dominantFreq ? dominantFreq.toFixed(2) + ' Hz' : 'No signal'), width / 2, height / 2 - 20);
+        // text('Note: ' + (noteName ? noteName : 'Unknown'), width / 2, height / 2 + 20);
+      }
+
+      function getDominantFrequency() {
+        const spectrum = fft.analyze(); // Get the frequency spectrum (Returns an array of amplitude values (between 0 and 255) across the frequency spectrum)
+        // console.log('spectrum:', spectrum);
+
+        // Find the index of the highest magnitude in the spectrum
+        let maxIndex = 0;
+        let maxValue = 0;
+        for (let i = 0; i < spectrum.length; i++) {
+          if (spectrum[i] > maxValue) {
+            maxValue = spectrum[i];
+            maxIndex = i;
+          }
+        }
+
+        // Convert the index to a frequency value
+        const dominantFreq = indexToFreq(
+          maxIndex,
+          getAudioContext().sampleRate,
+          fft.bins
+        );
+
+        // console.log('#maxIndex:', maxIndex, 'sample rate:', getAudioContext().sampleRate, 'fftBins:', fft.bins)
+        // console.log('FFT:', fft)
+
+        return dominantFreq;
+      }
+
+      function freqToMidi(frequency) {
+        return p5.prototype.freqToMidi(frequency);
+      }
+
+      function midiToNoteName(midiNote) {
+        const notes = [
+          "C",
+          "C#",
+          "D",
+          "D#",
+          "E",
+          "F",
+          "F#",
+          "G",
+          "G#",
+          "A",
+          "A#",
+          "B",
+        ];
+        const octave = Math.floor(midiNote / 12) - 1;
+        const noteIndex = midiNote % 12;
+
+        return notes[noteIndex] + octave;
+      }
+
+      function midiToFreq(midiNote) {
+        return p5.prototype.midiToFreq(midiNote);
+      }
+
+      function indexToFreq(index, sampleRate, fftBins) {
+        const binWidth = sampleRate / fftBins;
+
+        // console.log('#bin width:', binWidth);
+        console.log("##return:", (index * binWidth) / 2);
+
+        return (index * binWidth) / 2;
+      }
+
+      function randomNote() {
+        randomMidi = Math.floor(Math.random() * (84 - 48)) + 48;
+
+        return midiToNoteName(randomMidi);
+      }
+
+      function playOscillator() {
+        osc.start();
+
+        console.log(playing);
+
+        console.log("ready to call timer....");
+        callTimer();
+
+        playing = true;
+
+        randomFreq = midiToFreq(randomMidi);
+        osc.freq(randomFreq, 0.1, 0.2);
+        // osc.freq(440, 0.1, 0.2 );
+
+        // osc.amp(1, 0.1, 0.7)
+      }
+
+      function stopOscillator() {
+        osc.stop();
+      }
+
+      document.querySelector("#random").addEventListener("click", () => {
+        document.querySelector("#note").innerText = randomNote();
+      });
+
+      function matchFreq(dominantFreq, randomFreq) {
+        const noteFrequencies = [
+          130.81, // C3
+          138.59, // C#3
+          146.83, // D3
+          155.56, // D#3
+          164.81, // E3
+          174.61, // F3
+          185.0, // F#3
+          196.0, // G3
+          207.65, // G#3
+          220.0, // A3
+          233.08, // A#3
+          246.94, // B3
+          261.63, // C4
+          277.18, // C#4
+          293.66, // D4
+          311.13, // D#4
+          329.63, // E4
+          349.23, // F4
+          369.99, // F#4
+          392.0, // G4
+          415.3, // G#4
+          440.0, // A4
+          466.16, // A#4
+          493.88, // B4
+          523.25, // C5
+          554.37, // C#5
+          587.33, // D5
+          622.25, // D#5
+          659.26, // E5
+          698.46, // F5
+          739.99, // F#5
+          783.99, // G5
+          830.61, // G#5
+          880.0, // A5
+          932.33, // A#5
+          987.77, // B5
+          1046.5, // C6
+        ];
+
+        const bufferIncrement = 3; // Buffer increment in Hz
+
+        // Find the index of the dominant frequency in the noteFrequencies array
+        const dominantIndex = noteFrequencies.indexOf(dominantFreq);
+
+        // Find the index of the random frequency in the noteFrequencies array
+        const randomIndex = noteFrequencies.indexOf(randomFreq);
+
+        // Calculate the level difference between the dominant and random frequencies
+        const levelDifference = randomIndex - dominantIndex;
+
+        // Calculate the buffer based on the level difference and buffer increment
+        const buffer = Math.abs(levelDifference) * bufferIncrement;
+
+        // Check if the buffer is within the acceptable range for the given level difference
+        const minBuffer =
+          Math.min(dominantFreq, randomFreq) +
+          Math.floor(Math.abs(levelDifference) / 3) * bufferIncrement;
+        const maxBuffer =
+          Math.max(dominantFreq, randomFreq) +
+          Math.floor(Math.abs(levelDifference) / 3) * bufferIncrement;
+
+        return randomFreq >= minBuffer && randomFreq <= maxBuffer;
+      }
+    </script>
+  </body>
+</html>

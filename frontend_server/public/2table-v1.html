@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      th,
+      td {
+        background-color: lightcoral;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Rank</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>5 Cup</th>
+          <th>1 Min</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th>Time (Player)</th>
+          <th>Score (Player)</th>
+        </tr>
+      </thead>
+      <tbody id="rankTBody" data-template="row" data-bind="rows"></tbody>
+    </table>
+    <template data-name="row">
+      <tr>
+        <td data-text="no">1</td>
+        <td data-text="time_spending">1:00 (alice)</td>
+        <td data-text="score">123 (bob)</td>
+      </tr>
+    </template>
+    <script src="https://cdn.jsdelivr.net/npm/data-template@1.7/base.js"></script>
+    <script>
+      function formateTime(time) {
+        if (!time) return "";
+
+        time = Number(time);
+        var h = Math.floor(time / 3600);
+        var m = Math.floor((time % 3600) / 60);
+        var s = Math.floor((time % 3600) % 60);
+
+        var hDisplay = h > 0 ? h + (h == 1 ? " Hour, " : " Hour, ") : "";
+        var mDisplay = m > 0 ? m + (m == 1 ? " Min, " : " Min, ") : "";
+        var sDisplay = s > 0 ? s + (s == 1 ? " Sec" : " Sec") : "";
+        return hDisplay + mDisplay + sDisplay;
+      }
+
+      getJSON("/gameRank", (json) => {
+        let n = Math.max(json.fiveCupdata.length, json.oneMinuteData.length);
+        json.fiveCupdata.pop();
+        let rows = [];
+        for (let i = 0; i < n; i++) {
+          rows.push({
+            no: i + 1,
+            time_spending:
+              formateTime(json.fiveCupdata[i]?.time_spending) +
+              (json.fiveCupdata[i]?.username || ""),
+            score:
+              (json.oneMinuteData[i]?.user_score || "") +
+              (json.oneMinuteData[i]?.username || ""),
+          });
+        }
+        renderTemplate(rankTBody, { rows });
+      });
+    </script>
+  </body>
+</html>

@@ -46,6 +46,8 @@ h2 {
 
 .about {
   text-align: center;
+  position: fixed;
+  z-index: 0;
 }
 
 h3 {
@@ -61,4 +63,19 @@ h3 {
 
 .rank-container {
   background-color: red;
+}
+
+#measureSize {
+  position: fixed;
+  inset: 0;
+}
+canvas[data-engine*="three.js"] {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+button {
+  position: relative;
+  z-index: 1;
 }

@@ -4,9 +4,11 @@ import { OrbitControls } from "https://unpkg.com/three@0.147.0/examples/jsm/cont
 
 const scene = new THREE.Scene(); // 建立場景物件
 
+let measureSizeStyle = getComputedStyle(measureSize);
+console.log(measureSizeStyle.width, measureSizeStyle.height);
 const sizes = {
-  width: window.innerWidth, // 視窗寬度
-  height: window.innerHeight, // 視窗高度
+  width: +measureSizeStyle.width.replace("px", ""),
+  height: +measureSizeStyle.height.replace("px", ""),
 };
 
 let loadedModels = [];
