@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Cormorant:wght@300&display=swap"
+        rel="stylesheet">
+    <style>
+        .test {
+            font-family: 'Black Ops One', cursive;
+            /* font-family: 'Cormorant', serif; */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test">font</div>
+    <div class="normal">font</div>
+    <button onclick="test1()">test 1</button>
+    <button onclick="test2()">test 2</button>
+    <button onclick="test3()">test 3</button>
+    <button onclick="test4()">test 4</button>
+    <button onclick="test5()">test 5</button>
+    <button onclick="test6()">test 6</button>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+        function test1() {
+
+            Swal.fire({
+                title: 'Error!',
+                text: 'Do you want to continue',
+                icon: 'error',
+                confirmButtonText: 'Cool'
+            })
+        }
+
+        function test2() {
+                Swal.fire({
+                    title: 'Login Form',
+                    html: `<input type="text" id="login" class="swal2-input" placeholder="Username">
+                            <input type="password" id="password" class="swal2-input" placeholder="Password">`,
+                    confirmButtonText: 'Sign in',
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        const login = Swal.getPopup().querySelector('#login').value
+                        const password = Swal.getPopup().querySelector('#password').value
+                        if (!login || !password) {
+                            Swal.showValidationMessage(`Please enter login and password`)
+                        }
+                        return { login: login, password: password }
+                    }
+                }).then((result) => {
+                    Swal.fire(`
+                    Login: ${result.value.login}
+                    Password: ${result.value.password}
+                    `.trim())
+                })
+        }
+
+        function test3() {
+            Swal.fire({
+                title: 'Submit your username',
+                input: 'text',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                // showCancelButton: true,
+                confirmButtonText: 'Submit!',
+                // showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    const login = Swal.getPopup().querySelector('#login').value
+                        const password = Swal.getPopup().querySelector('#password').value
+                        if (!login || !password) {
+                            Swal.showValidationMessage(`Please enter login and password`)
+                        }
+                        return { login: login, password: password }
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                    title: `${result.value.login}'s avatar`,
+                    imageUrl: result.value.avatar_url
+                    })
+                }
+                })
+
+        }
+
+        function test4() {
+            Swal.fire({
+    title: 'name',
+    html: '<input id="name-input" class="swal2-input" type="text">',
+    confirmButtonText: 'Submit!',
+    // showCancelButton: true,
+    preConfirm: () => {
+      const name = document.getElementById('name-input').value;
+      if (name) {
+        // Process the player's name (e.g., save it, display it, etc.)
+        Swal.fire(`Thank you, ${name}!`, 'Your score has been recorded.', 'success');
+      } else {
+        return Swal.showValidationMessage('Please enter your name.');
+      }
+    }
+  });
+        }
+
+
+        function test5() {
+            Swal.fire({
+    title: 'Game Over',
+    html: '<input id="name-input" class="swal2-input" placeholder="Enter your name" type="text">',
+    showCancelButton: true,
+    customClass: {
+      container: 'mobile-popup'
+    },
+    preConfirm: () => {
+      const name = document.getElementById('name-input').value;
+      if (name) {
+        // Process the player's name (e.g., save it, display it, etc.)
+        Swal.fire(`Thank you, ${name}!`, 'Your score has been recorded.', 'success');
+      } else {
+        return Swal.showValidationMessage('Please enter your name.');
+      }
+    }
+  });
+        }
+
+
+    async  function test6() {
+const { value: username } = await Swal.fire({
+  title: 'Wow, show it to the world!',
+  input: 'text',
+  inputLabel: 'Your score: X Cups',
+  inputPlaceholder: 'Enter your username'
+})
+
+if (username) {
+  Swal.fire(`Name: ${username} \n Score: X Cups`)
+}
+        }
+    
+    </script>
+</body>
+
+</html>

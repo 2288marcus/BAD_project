@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #output {
+            opacity: 0;
+        }
+
+        .show {
+            animation: show 2s;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes show {
+            0% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="output"></div>
+
+    <script>
+        function show(text) {
+            output.textContent = text
+            output.classList.add('show')
+            setTimeout(() => {
+                output.classList.remove('show')
+            }, 2000)
+        }
+    </script>
+</body>
+
+</html>
