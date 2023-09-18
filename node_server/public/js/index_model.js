@@ -23,8 +23,13 @@ function onLoad(gltf) {
   // 创建玻璃材质
   const glassMaterial = new THREE.MeshStandardMaterial({
     color: 0xffffff,
-    transparent: true, // 开启透明度
-    opacity: 0.2, // 设置透明度
+    transparent: true,
+    opacity: 0.5,
+    roughness: 0.5,
+    metalness: 1.0,
+    clearcoat: 1.0,
+    clearcoatRoughness: 0.1,
+    envMapIntensity: 1.0,
   });
 
   // 设置模型的材质
