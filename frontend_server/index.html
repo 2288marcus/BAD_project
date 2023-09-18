@@ -5,6 +5,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Main</title>
+    <style>
+      #rankDialog {
+        position: fixed;
+        inset: 50%;
+        width: 1px;
+        height: 1px;
+        transition: all 0.5s;
+        overflow: hidden;
+        padding: 0;
+      }
+      #rankDialog.open {
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      #rankIFrame {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -37,15 +57,33 @@
       >
     </div>
     <h1>
-      <a href="rank.html"
-        ><button class="btn btn-outline-light">Rank</button></a
-      >
+      <button class="btn btn-outline-light" onclick="showRank()">Rank</button>
+      <dialog id="rankDialog">
+        <button onclick="hideRank()">close</button>
+        <br />
+        <iframe style="border: 0" id="rankIFrame"></iframe>
+      </dialog>
     </h1>
     <h1>
       <a href="about.html"
         ><button class="btn btn-outline-light">About</button></a
       >
     </h1>
-    <script type="module" src="/public/js/index_model.js"></script>
+    <script>
+      function hideRank() {
+        rankDialog.classList.remove("open");
+        setTimeout(() => {
+          rankDialog.open = false;
+        }, 500);
+      }
+      function showRank() {
+        rankDialog.open = true;
+        setTimeout(() => {
+          rankDialog.classList.add("open");
+        });
+        rankIFrame.src = "/rank-demo.html";
+        rankIFrame.src = "/rank.html";
+      }
+    </script>
   </body>
 </html>

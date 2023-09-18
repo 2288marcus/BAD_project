@@ -131,6 +131,10 @@ function addGlassModelToScene(model) {
 
   // 更新混合器的时间
   function animate() {
+    if (!isMatch) {
+      requestAnimationFrame(animate);
+      return;
+    }
     // 检查动画是否超过了一次动画的总时长
     let step = 0.01;
     if (mixer.time + step < glass.animation.duration) {
@@ -175,8 +179,6 @@ function addMoreGlass() {
   addGlassModelToScene(model);
   counterSpan.textContent++;
 }
-
-// window.addMoreGlass = addMoreGlass;
 
 // 渲染循环函数，用于更新场景和相机的渲染
 renderer.setAnimationLoop(render);

@@ -15,6 +15,8 @@ lerna-debug.log*
 dist
 dist-ssr
 *.local
+cube
+draco
 
 # Editor directories and files
 .vscode/*

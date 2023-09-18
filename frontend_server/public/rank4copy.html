@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rank</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a href="index.html"
+      ><button class="btn btn-outline-light" style="float: right">
+        Back
+      </button></a
+    >
+    <h1>RANK</h1>
+    <table id="rankTable" data-template="rankTable" data-bind="data"></table>
+    <template data-name="rankTable">
+      <fragment data-value="tables">
+        <thead class="rank-header thead">
+          <tr class="tr2">
+            <th data-text="title">5 Cup</th>
+          </tr>
+          <tr class="tr">
+            <th data-text="headings">No</th>
+          </tr>
+        </thead>
+        <tbody class="rank-container">
+          <tr class="tr3" data-value="data">
+            <td data-text="no">1</td>
+            <td data-text="result">1 Min, 40 Sec</td>
+            <td data-text="username">(Tevin-t)</td>
+          </tr>
+        </tbody>
+      </fragment>
+    </template>
+    <script src="https://cdn.jsdelivr.net/npm/data-template@1.7/base.js"></script>
+    <script>
+      async function loadrankList() {
+        let res = await fetch(`/gameRank`);
+        let json = await res.json();
+
+        renderTemplate(rankTable, {
+          data: {
+            tables: [
+              {
+                title: "5 Cup",
+                headings: ["No", "Time Spending", "( User Name )"],
+                data: json.fiveCupdata.map((record, index) => {
+                  return {
+                    no: index + 1,
+                    result: formateTime(record.time_spending),
+                    username: record.username,
+                  };
+                }),
+              },
+              {
+                titile: "1 Min",
+                headings: ["No", "User score", "( User Name )"],
+                data: json.oneMinuteData.map((record, index) => {
+                  return {
+                    no: index + 1,
+                    result: record.user_score,
+                    username: record.username,
+                  };
+                }),
+              },
+            ],
+          },
+        });
+
+        rankTable.querySelectorAll("template").forEach((template) => {
+          rankTable.appendChild(template.content);
+        });
+      }
+      loadrankList();
+
+      function formateTime(time) {
+        time = Number(time);
+        var h = Math.floor(time / 3600);
+        var m = Math.floor((time % 3600) / 60);
+        var s = Math.floor((time % 3600) % 60);
+
+        var hDisplay = h > 0 ? h + (h == 1 ? " Hour, " : " Hour, ") : "";
+        var mDisplay = m > 0 ? m + (m == 1 ? " Min, " : " Min, ") : "";
+        var sDisplay = s > 0 ? s + (s == 1 ? " Sec" : " Sec") : "";
+        return hDisplay + mDisplay + sDisplay;
+      }
+
+      console.log(formateTime(100));
+    </script>
+  </body>
+</html>
