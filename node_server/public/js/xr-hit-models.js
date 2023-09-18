@@ -202,6 +202,12 @@ function render(timestamp, frame) {
         document.getElementById("timer").style.display = "block";
         document.getElementById("play").style.display = "block";
         document.getElementById("create").style.display = "block";
+        document.querySelector(".canvas-container").style.display = "block";
+        // document.querySelector(".canvas-container").style.top = "4rem";
+        document.querySelector(".listen").style.display = "block";
+        document.querySelector("#restart").style.display = "block";
+        document.querySelector("#match-note").style.display = "block";
+        document.querySelector("#matchTest").style.display = "block";
       }
     }
 

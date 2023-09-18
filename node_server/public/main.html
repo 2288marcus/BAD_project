@@ -1,41 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Webxr Ar</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-      crossorigin="anonymous"
-    ></script>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <a href="../index.html"
-      ><button class="btn btn-outline-light" style="float: right">
-        Back
-      </button></a
-    >
-    <div class="timer-container" id="timer">01:00:000</div>
-    <button class="btn btn-outline-light" id="counterSpan">0</button>
-    <button class="btn btn-outline-light" id="play">play</button>
-    <button class="btn btn-outline-light" id="create">create</button>
-    <!-- <button onclick="countdownTimer()">start</button> -->
-    <script src="/js/timer.js"></script>
-    <!-- <script type="module" src="../cube/normal-cube.js"></script> -->
-    <!-- <script type="module" src="../cube/xr-cube.js"></script> -->
-    <!-- <script type="module" src="../cube/xr-hit-cube.js"></script> -->
-    <!-- <script type="module" src="xr-domOverlay.js"></script> -->
-    <script type="module" src="/js/xr-hit-models.js"></script>
-    <!-- <script type="module" src="/js/xr-hit-models_test.js"></script> -->
-    <!-- 
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Webxr Ar</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <a href="../index.html"><button class="btn btn-outline-light" style="float: right">
+      Back
+    </button></a>
+  <!-- <div class="timer-container" id="timer">01:00:000</div> -->
+  <button class="btn btn-outline-light" id="counterSpan">0</button>
+  <button class="btn btn-outline-light" id="play">play</button>
+  <button class="btn btn-outline-light" id="create">create</button>
+
+
+  <div class="d-flex">
+    <div id="timer">01:00:00</div>
+    <div id="cup-counter">0 Cup</div>
+  </div>
+  <div id="restart" onclick="restart()"> Restart</div>
+
+  <button id="matchTest" onclick="matched()">testing: match</button>
+  <button onclick="endGame()">testing: end game</button>
+
+  <button id="randomLor">random</button>
+
+  <div class="canvas-container"></div>
+
+  <div class="text hz"></div>
+  <div class="text notePlay"></div>
+
+  <div class="d-flex">
+    <div id="match-note">F6</div>
+  </div>
+
+  <div class="d-flex">
+    <div class="matchStatus">Ready</div>
+  </div>
+  <button class="listen" onclick="startMic()">Sing it!</button>
+
+
+  <!-- <button onclick="countdownTimer()">start</button> -->
+  <script src="/js/timer.js"></script>
+  <!-- <script type="module" src="../cube/normal-cube.js"></script> -->
+  <!-- <script type="module" src="../cube/xr-cube.js"></script> -->
+  <!-- <script type="module" src="../cube/xr-hit-cube.js"></script> -->
+  <!-- <script type="module" src="xr-domOverlay.js"></script> -->
+  <script type="module" src="/js/xr-hit-models.js"></script>
+  <script src="/js/audio.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.js"
+    integrity="sha512-M7uzkKVt12bO/ClDOwaTk0AUwDPmJzjxri/KQKft2cisI6q3zJ4KxX3IfSQXF9Z6WU6NNW67JAljgWrA4WiiOA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/addons/p5.sound.js"
+    integrity="sha512-TU9AWtV5uUZPX8dbBAH8NQF1tSdigPRRT82vllAQ1Ke28puiqLA6ZVKxtUGlgrH6yWFnkKy+sE6luNEGH9ar0A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+  <!-- <script type="module" src="/js/xr-hit-models_test.js"></script> -->
+  <!-- 
     <div id="overlay-content">
       <div id="container">
         <label for="model-select">Choose Model</label>
@@ -45,6 +80,7 @@
         </select>
       </div>
     </div> -->
-    <!-- Comment style display none for dom overlay to work in style.css file -->
-  </body>
+  <!-- Comment style display none for dom overlay to work in style.css file -->
+</body>
+
 </html>

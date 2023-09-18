@@ -97,3 +97,108 @@ button {
 p {
   font-family: "Oswald", sans-serif;
 }
+
+.d-flex {
+  display: flex;
+  justify-content: center;
+}
+
+.listen {
+  background-color: #515751;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+
+  font-size: 20px;
+  margin: 4px 0;
+  cursor: pointer;
+  width: 100vw;
+
+  position: fixed;
+  bottom: 3.6rem;
+  left: 0;
+
+  z-index: 2;
+}
+
+#timer {
+  /* position: fixed;
+  top: 2rem; */
+
+  font-size: 24px;
+  text-align: center;
+  color: #fffef9;
+  text-shadow: -4px 2px 2px rgba(54, 63, 49, 1);
+
+  font-family: "Black Ops One";
+}
+
+#restart {
+  text-align: center;
+  color: #4caf50;
+
+  font-family: "Black Ops One";
+}
+
+#cup-counter {
+  position: fixed;
+  top: 3rem;
+  right: 0.5rem;
+  text-align: center;
+  font-size: 19px;
+  color: #fffef9;
+  text-shadow: -4px 2px 2px rgba(54, 63, 49, 1);
+
+  font-family: "Black Ops One", cursive;
+}
+
+.matchStatus {
+  text-align: center;
+  color: #4caf50;
+  font-size: 3rem;
+
+  position: fixed;
+
+  bottom: 9rem;
+}
+
+button {
+  margin: 0.25rem;
+}
+
+#match-note {
+  font-size: 6rem;
+  color: #4caf50;
+  position: fixed;
+  top: 13rem;
+  text-align: center;
+
+  opacity: 0;
+}
+
+.fade {
+  animation: fade-in-out 3s;
+}
+
+@keyframes fade-in-out {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.canvas-container {
+  display: flex;
+  justify-content: center;
+
+  z-index: 1;
+}
