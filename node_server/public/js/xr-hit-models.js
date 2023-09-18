@@ -85,7 +85,7 @@ function createGltf() {
     glass.gltf = gltf;
     glass.animation = gltf.animations[0];
     glass.model = gltf.scene;
-
+    ``;
     // 遍历模型的子对象，将其材质设置为玻璃材质
     glass.model.traverse((child) => {
       if (child.isMesh) {
@@ -146,6 +146,8 @@ function addGlassModelToScene(model) {
 
   if (isMatch) {
     animate();
+    // isMatched();
+    console.log("animate playing");
     isMatch = false;
   }
 }
@@ -158,7 +160,7 @@ document.querySelector("#create").addEventListener("click", () => {
     firstModel.mixer.stopAllAction(); // 暂停所有动画
     scene.remove(firstModel);
     firstModel = null;
-    countdownTimer();
+    // countdownTimer();
   }
   onSelect();
 });
@@ -198,12 +200,11 @@ function render(timestamp, frame) {
         // document.getElementById("counterSpan").style.display = "none";
         // document.getElementById("timer").style.display = "none";
       } else {
-        document.getElementById("counterSpan").style.display = "block";
+        // document.getElementById("counterSpan").style.display = "block";
         document.getElementById("timer").style.display = "block";
         document.getElementById("play").style.display = "block";
         document.getElementById("create").style.display = "block";
         document.querySelector(".canvas-container").style.display = "block";
-        // document.querySelector(".canvas-container").style.top = "4rem";
         document.querySelector(".listen").style.display = "block";
         document.querySelector("#restart").style.display = "block";
         document.querySelector("#match-note").style.display = "block";

@@ -11,6 +11,16 @@
     integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
     crossorigin="anonymous"></script>
   <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Cormorant:wght@300&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200&family=Righteous&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -22,7 +32,7 @@
   <button class="btn btn-outline-light" id="play">play</button>
   <button class="btn btn-outline-light" id="create">create</button>
 
-
+  <div id="error">?</div>
   <div class="d-flex">
     <div id="timer">01:00:00</div>
     <div id="cup-counter">0 Cup</div>
@@ -33,8 +43,10 @@
   <button onclick="endGame()">testing: end game</button>
 
   <button id="randomLor">random</button>
+  <div class="d-flex">
+    <div class="canvas-container"></div>
+  </div>
 
-  <div class="canvas-container"></div>
 
   <div class="text hz"></div>
   <div class="text notePlay"></div>
@@ -47,6 +59,7 @@
     <div class="matchStatus">Ready</div>
   </div>
   <button class="listen" onclick="startMic()">Sing it!</button>
+  <button id="startButton">Start Microphone</button>
 
 
   <!-- <button onclick="countdownTimer()">start</button> -->

@@ -22,13 +22,13 @@ function setup() {
   console.log("cup:", cup);
 
   console.log(document.querySelector(".canvas-container"));
-  console.log(cup);
+
   // document.querySelector('.canvas-container').appendChild(cup.canvas)
   cup.parent(document.querySelector(".canvas-container"));
 
   // cup.parent(document.querySelector("#canvas"));
 
-  background("#FFFFFF");
+  cup.background("#deffdf");
 
   mic = new p5.AudioIn();
   console.log("mic:", mic);
@@ -46,7 +46,7 @@ function setup() {
 }
 
 function draw() {
-  background("#FFFFFF");
+  background("#deffdf");
 
   dominantFreq = getDominantFrequency();
 
@@ -88,6 +88,7 @@ function playOscillator() {
   stopMic();
 
   osc.freq(randomFreq, 0.1, 0.2);
+  osc.amp(1);
   osc.start();
 }
 
@@ -96,10 +97,10 @@ function stopOscillator() {
 }
 
 function startMic() {
-  mic.start();
   console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~start mic");
 
   checkGamePlaying();
+  mic.start();
 }
 
 function stopMic() {
@@ -232,6 +233,8 @@ function matchFreq(dominantFreq, randomFreq) {
 
 function matched() {
   //TODO cup falls
+  //   isMatch = true;
+  //   animate();
 
   disableMic();
   console.log("mic disable ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -275,6 +278,7 @@ function checkGamePlaying() {
     // matchStatusBar.style.backgroundColor = '';
     matchStatusBar.style.fontSize = "3rem";
     matchStatusBar.innerText = isMatched ? isMatched : "Ready?...";
+    // matchStatusBar.innerText = isMatched ? isMatched : "Ready!!!...";
   } else {
     matchStatusBar.innerText = "Touch and Listen to the Glass!";
     matchStatusBar.style.fontSize = "1.25rem";
@@ -334,4 +338,42 @@ function restart() {
     "gamePlaying false?",
     gamePlaying
   );
+}
+
+// document.querySelector(".listen").addEventListener("click", () => {
+//   startMic();
+// });
+
+let audioContext;
+let microphone;
+
+document
+  .getElementById("startButton")
+  .addEventListener("click", startMicrophone);
+
+function startMicrophone() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    document.querySelector("#error").innerText =
+      "getUserMedia is not supported in this browser";
+    console.log("getUserMedia is not supported in this browser");
+    return;
+  }
+
+  // Create an audio context
+  audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+  // Request access to the microphone
+  navigator.mediaDevices
+    .getUserMedia({ audio: true })
+    .then((stream) => {
+      // Create a media stream source from the microphone stream
+      microphone = audioContext.createMediaStreamSource(stream);
+
+      // Connect the microphone to the audio context destination (output)
+      microphone.connect(audioContext.destination);
+    })
+    .catch((error) => {
+      document.querySelector("#error").innerText = error.message;
+      console.log("Error accessing microphone:", error);
+    });
 }
