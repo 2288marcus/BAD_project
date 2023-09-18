@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #rankDialog {
+        position: fixed;
+        inset: 50%;
+        width: 1px;
+        height: 1px;
+        transition: all 0.5s;
+        overflow: hidden;
+        padding: 0;
+      }
+      #rankDialog.open {
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      #rankIFrame {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>main</h1>
+    <button onclick="showRank()">show rank</button>
+    <dialog id="rankDialog">
+      <button onclick="hideRank()">close</button>
+      <br />
+      <iframe style="border: 0" id="rankIFrame"></iframe>
+    </dialog>
+    <script>
+      function hideRank() {
+        rankDialog.classList.remove("open");
+        setTimeout(() => {
+          rankDialog.open = false;
+        }, 500);
+      }
+      function showRank() {
+        rankDialog.open = true;
+        setTimeout(() => {
+          rankDialog.classList.add("open");
+        });
+        rankIFrame.src = "/rank-demo.html";
+        rankIFrame.src = "/rank3copy.html";
+      }
+    </script>
+  </body>
+</html>

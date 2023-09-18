@@ -10,12 +10,6 @@
       integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
       crossorigin="anonymous"
     />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-      crossorigin="anonymous"
-    ></script>
-    <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -28,7 +22,17 @@
     <!-- <script type="module" src="/cube/xr-cube.js"></script> -->
     <!-- <script type="module" src="/cube/xr-hit-cube.js"></script> -->
     <button class="btn btn-outline-light" id="play">Play</button>
+    <div class="timer-container">
+      <div id="timer">00:59</div>
+    </div>
+    <button onclick="countdownTimer()">start</button>
     <script type="module" src="../xr-hit-models.js"></script>
+    <script src="js/timer.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
     <!-- <script type="module" src="xr-domOverlay.js"></script> -->
     <!-- 
     <div id="overlay-content">
