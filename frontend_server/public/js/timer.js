@@ -43,18 +43,17 @@ function countdownTimer() {
       .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}:${milliseconds
       .toString()
       .padStart(2, "0")}`;
-    
-      document.querySelector("#timer").style.color = "#fffef9";
-    
-      
-    if (remainingTime <= 10000 ) {
+
+    document.querySelector("#timer").style.color = "#fffef9";
+
+    if (remainingTime <= 10000) {
       document.querySelector("#timer").style.color = "orange";
     }
-    
-    if (remainingTime <= 5000 ) {
+
+    if (remainingTime <= 5000) {
       document.querySelector("#timer").style.color = "red";
     }
-    
+
     if (remainingTime === 0) {
       endGame();
       clearInterval(countdownInterval);
@@ -62,18 +61,19 @@ function countdownTimer() {
 
       console.log("END GAME!", gamePlaying);
       console.log("Countdown finished");
-    }      
+    }
   }
-  
+  return countdownInterval;
 }
-
 
 function callTimer() {
   if (gamePlaying) {
     console.log("already playing, timer continued counting");
     return;
   }
-  countdownTimer();
+  let timer = countdownTimer();
+
   console.log("timer called!");
   gamePlaying = true;
+  return timer;
 }
