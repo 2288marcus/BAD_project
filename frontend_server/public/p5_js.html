@@ -27,7 +27,7 @@
         }
 
         .listen {
-            background-color: #4caf50;
+            background-color: #515751;
             border: none;
             color: white;
             padding: 15px 32px;
@@ -175,8 +175,7 @@
     <div class="d-flex">
         <div class="matchStatus">Ready</div>
     </div>
-    <button class="listen" onclick="mic.start()">Sing it!</button>
-    <!-- onclick="mic.start()" -->
+    <button class="listen" onclick="startMic()">Sing it!</button>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.js"
@@ -222,7 +221,7 @@
 
         let dominantFreq;
         let isMatched;
-
+        let timer
 
         let cupCounter = 0;
         let matchedNotes = [];
@@ -254,9 +253,6 @@
             polySynth = new p5.PolySynth();
 
 
-            document.querySelector(".listen").addEventListener("click", () => {
-                mic.start();
-            })
 
         }
 
@@ -270,8 +266,10 @@
             const noteName = midiToNote(midi);
 
             const frequency = midiToFreq(midi);
+            if (dominantFreq) {
+                isMatched = matchFreq(dominantFreq, randomFreq);
+            }
 
-            isMatched = matchFreq(dominantFreq, randomFreq);
 
             document.querySelector(".hz").innerText =
                 "Dominant Frequency: " +
@@ -282,6 +280,21 @@
             checkGamePlaying();
 
         }
+
+        function startMic() {
+            mic.start();
+            console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~start mic");
+
+        }
+
+        function disableMic() {
+            document.querySelector('.listen').style.backgroundColor = '#515751';
+            document.querySelector(".matchStatus").innerText = "Ready?...";
+
+
+
+        }
+
 
         function getDominantFrequency() {
             const spectrum = fft.analyze(); // Get the frequency spectrum (Returns an array of amplitude values (between 0 and 255) across the frequency spectrum)
@@ -359,17 +372,19 @@
         function playOscillator() {
             if (firstNote) {
                 genRandomNote();
-                callTimer();
+                timer = callTimer();
                 console.log("Start the game, 1 st round and gen new!");
                 firstNote = false;
             }
 
-            console.log("play the note :", randomNote, ",game status:", gamePlaying);
+            console.log("play the note :", randomNote, "frq:", randomFreq, ",game status:", gamePlaying);
 
-            // mic.stop();
+            mic.stop();
 
             osc.freq(randomFreq, 0.1, 0.2);
             osc.start();
+
+            document.querySelector('.listen').style.backgroundColor = '#4caf50'
 
         }
 
@@ -427,6 +442,8 @@
 
         function matchFreq(dominantFreq, randomFreq) {
 
+            // dominantFreq = randomFreq;
+
             let bufferRange = 0.02;
 
             let thresholdRange = 0.05
@@ -437,9 +454,9 @@
 
             if (dominantFreq >= lowerThresholdBound && dominantFreq <= upperThresholdBound) {
                 if (distance <= bufferRange * randomFreq) {
-
+                    console.log("!!!!!!!!!");
                     matched();
-
+                    console.log("~~~~~~~~~~~~~");
                     return "Perfect !!";
                 } else {
                     return "Good try ~";
@@ -450,82 +467,6 @@
 
         }
 
-
-        // function matchFreq(dominantFreq, randomFreq) {
-        //     try {
-        //         const noteFrequencies = [
-        //             130.81, // C3
-        //             138.59, // C#3 
-        //             146.83, // D3
-        //             155.56, // D#3
-        //             164.81, // E3
-        //             174.61, // F3
-        //             185.0, // F#3
-        //             196.0, // G3
-        //             207.65, // G#3
-        //             220.0, // A3
-        //             233.08, // A#3
-        //             246.94, // B3
-        //             261.63, // C4
-        //             277.18, // C#4
-        //             293.66, // D4
-        //             311.13, // D#4
-        //             329.63, // E4
-        //             349.23, // F4
-        //             369.99, // F#4
-        //             392.0, // G4
-        //             415.3, // G#4
-        //             440.0, // A4
-        //             466.16, // A#4
-        //             493.88, // B4
-        //             523.25, // C5
-        //             554.37, // C#5
-        //             587.33, // D5
-        //             622.25, // D#5
-        //             659.26, // E5
-        //             698.46, // F5
-        //             739.99, // F#5
-        //             783.99, // G5
-        //             830.61, // G#5
-        //             880.0, // A5
-        //             932.33, // A#5
-        //             987.77, // B5
-        //             1046.5, // C6
-        //         ];
-
-        //         let bufferRange = 0.02;
-        //         let thresholdRange = 0.05;
-
-        //         for (let i = 0; i < noteFrequencies.length; i++) {
-        //             const lowerThresholdBound = noteFrequencies[i] * (1 - thresholdRange);
-        //             const upperThresholdBound = noteFrequencies[i] * (1 + thresholdRange);
-        //             // const lowerBufferBound = noteFrequencies[i] * (1 - bufferRange);
-        //             // const upperBufferBound = noteFrequencies[i] * (1 + bufferRange);
-
-        //             console.log("lowerThresholdBound = " + lowerThresholdBound, "upperThresholdBound = " + upperThresholdBound);
-
-        //             if (dominantFreq >= lowerThresholdBound && dominantFreq <= upperThresholdBound) {
-        //                 let distance = Math.abs(dominantFreq - randomFreq);
-        //                 if (distance <= bufferRange * randomFreq) {
-
-        //                     matched();
-
-        //                     return "Perfect !!";
-        //                 } else {
-        //                     return "Good try ~";
-        //                 }
-        //             }
-
-        //             //TODO matching logic...+1??
-        //             return "Poor...";
-        //         }
-        //     } catch (error) {
-        //         console.error("An error occurred in matchFreq():", error);
-        //         return "Error";
-
-        //     }
-        // }
-
         // console.log("want to fit ~ noteFreq:", noteFrequencies[i],
         //                     '\n', "randomFreq:", randomFreq,
         //                     "\n", "range:", lowerBound + "to ",upperBound);
@@ -535,6 +476,16 @@
             if (gamePlaying) {
 
                 matchFreq(dominantFreq, randomFreq);
+
+                console.log("@@@@@@@@@@@@", { isMatched });
+
+                if (isMatched === "Perfect !!") {
+                    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@", isMatched);
+                    // document.querySelector(".matchStatus").innerText = "Perfect !!";
+                    return
+                }
+
+
                 document.querySelector(".matchStatus").innerText = isMatched;
 
             } else {
@@ -554,7 +505,7 @@
             mic.stop();
             noLoop();
 
-            console.log('total cups;', cupCounter);
+            console.log('total cups;', cupCounter, 'all matched notes:', matchedNotes);
 
             gamePlaying = false;
 
@@ -562,10 +513,6 @@
 
 
         }
-
-        // document.querySelector(".listen").addEventListener("click", function () {
-        //     console.log("'sing it' clicked!");
-        //     mic.start();
 
         //     let a = getAudioContext()
         //     console.log(a);
@@ -577,7 +524,7 @@
 
         function matched() {
             mic.stop();
-
+            console.log("mic stop ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             cupCounter += 1;
             if (cupCounter === 1) {
                 document.querySelector("#cup-counter").innerText = `Cup: \n ${cupCounter}`;
@@ -585,7 +532,7 @@
                 document.querySelector("#cup-counter").innerText = `Cups: \n ${cupCounter}`;
             }
 
-            // matchedNotes.push(randomNote);
+            matchedNotes.push(randomNote);
 
             document.querySelector("#match-note").innerText = randomNote
             document.querySelector("#match-note").style.visibility = 'visible'
@@ -596,23 +543,24 @@
 
             //TODO show matching status
 
-            // document.querySelector(".matchStatus").innerText = "You are perfect!"
+            document.querySelector(".matchStatus").innerText = "You are perfect!"
 
 
 
             genRandomNote();
+            disableMic();
 
         }
 
         async function playerForm() {
             const { value: username } = await Swal.fire({
-                title: 'Wow, show it to the world!',
+                title: 'WOW~ \n show it to the world!',
                 input: 'text',
-                inputLabel: `Your score: ${cupCounter} Cups`,
+                inputLabel: `Your score: ${cupCounter} Cups \n with notes: ${matchedNotes}`,
                 inputPlaceholder: 'Enter your username',
                 preConfirm: (inputValue) => {
                     if (!inputValue) {
-                        Swal.showValidationMessage(`Let's tell your name to the world!!!`);
+                        Swal.showValidationMessage(`Hey, tell your name to the world!!!`);
                     }
                     return inputValue;
                 },
@@ -624,7 +572,11 @@
         }
 
         function restart() {
-            console.log("RESTART");
+            clearInterval(timer);
+            // clearTimer(timer)
+            document.querySelector('#timer').textContent = '01:00:00'
+            document.querySelector("#timer").style.color = "#fffef9";
+
             firstNote = true;
             gamePlaying = false;
 
@@ -632,6 +584,8 @@
             document.querySelector("#cup-counter").innerText = `Cup: \n ${cupCounter}`;
 
             matchedNotes = [];
+
+            console.log("RESTART", "firstNote true?", firstNote, "gamePlaying false?", gamePlaying);
 
 
         }
