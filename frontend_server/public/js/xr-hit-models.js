@@ -7,6 +7,7 @@ let loadedModels = [];
 let hitTestSource = null;
 let hitTestSourceRequested = false;
 let glass = {};
+let isMatch = false;
 
 window.glass = glass;
 let firstModel;
@@ -58,7 +59,7 @@ document.body.appendChild(
 );
 
 let controller = renderer.xr.getController(0);
-controller.addEventListener("select", onSelect);
+// controller.addEventListener("select", onSelect);
 scene.add(controller);
 
 function setupLight() {
@@ -138,16 +139,24 @@ function addGlassModelToScene(model) {
       requestAnimationFrame(animate);
     }
   }
-  animate();
+
+  if (isMatch) {
+    animate();
+    isMatch = false;
+  }
 }
-document.querySelector("#play").addEventListener("click", () => animate());
-window.addEventListener("click", () => {
+
+document.querySelector("#play").addEventListener("click", () => {
+  isMatch = true;
+});
+document.querySelector("#create").addEventListener("click", () => {
   if (firstModel) {
     firstModel.mixer.stopAllAction(); // 暂停所有动画
     scene.remove(firstModel);
     firstModel = null;
     countdownTimer();
   }
+  onSelect();
 });
 
 function onSelect() {
@@ -167,7 +176,7 @@ function addMoreGlass() {
   counterSpan.textContent++;
 }
 
-window.addMoreGlass = addMoreGlass;
+// window.addMoreGlass = addMoreGlass;
 
 // 渲染循环函数，用于更新场景和相机的渲染
 renderer.setAnimationLoop(render);
