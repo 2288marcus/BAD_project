@@ -46,6 +46,8 @@ h2 {
 
 .about {
   text-align: center;
+  position: fixed;
+  z-index: 0;
 }
 
 h3 {
