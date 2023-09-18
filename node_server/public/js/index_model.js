@@ -1,7 +1,6 @@
-import * as THREE from "https://unpkg.com/three@0.120.1/build/three.module.js";
+import * as THREE from "three";
 import { GLTFLoader } from "https://unpkg.com/three@0.120.1/examples/jsm/loaders/GLTFLoader.js";
-import { MeshStandardMaterial } from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { OrbitControls } from "https://unpkg.com/three@0.147.0/examples/jsm/controls/OrbitControls.js";
 
 const scene = new THREE.Scene(); // 建立場景物件
 
@@ -13,14 +12,14 @@ const sizes = {
 let loadedModels = [];
 
 let gltfLoader = new GLTFLoader();
-gltfLoader.load("/public/models/wineglass.glb", onLoad);
+gltfLoader.load("/models/wineglass.glb", onLoad);
 
 function onLoad(gltf) {
   const model = gltf.scene;
   loadedModels.push(model);
 
   // 创建玻璃材质
-  const glassMaterial = new MeshStandardMaterial({
+  const glassMaterial = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     transparent: true, // 开启透明度
     opacity: 0.2, // 设置透明度

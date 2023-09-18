@@ -81,7 +81,7 @@ function addLight(intensity, [x, y, z]) {
 
 function createGltf() {
   let gltfLoader = new GLTFLoader();
-  gltfLoader.load("/public/models/wineglass.glb", (gltf) => {
+  gltfLoader.load("/models/wineglass.glb", (gltf) => {
     glass.gltf = gltf;
     glass.animation = gltf.animations[0];
     glass.model = gltf.scene;

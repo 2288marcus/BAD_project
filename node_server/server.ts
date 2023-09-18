@@ -8,8 +8,12 @@ import cors from "cors";
 
 let app = express();
 
-app.use(express.static("../frontend_server/public"));
-app.use(express.static("../frontend_server"));
+// three/addons/controls/OrbitControls.js
+app.use(
+  "/three/addons/controls/",
+  express.static("node_modules/three/examples/jsm/controls")
+);
+app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());

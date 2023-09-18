@@ -8,7 +8,7 @@ let hitTestSource = null;
 let hitTestSourceRequested = false;
 
 let gltfLoader = new GLTFLoader();
-gltfLoader.load("/public/models/wineglass.glb", onLoad);
+gltfLoader.load("/models/wineglass.glb", onLoad);
 
 function onLoad(gltf) {
   loadedModels.push(gltf.scene);
