@@ -9,13 +9,19 @@ body {
   min-height: 100vh;
   width: 100%;
   overflow: hidden;
-  background-color: #36362d;
+  background-color: #939378;
+  font-family: "Bungee Spice", cursive;
   color: aliceblue;
 }
 
 h1 {
   text-align: center;
   padding-top: 40px;
+  position: relative;
+  z-index: 1;
+}
+#index_h1 {
+  font-family: "Bungee Spice", cursive;
 }
 
 /* .col {
@@ -34,8 +40,11 @@ h1 {
 .btn-row {
   display: flex;
   justify-content: space-evenly;
+  font-family: "Oswald", sans-serif;
 }
-
+.btn {
+  font-family: "Oswald", sans-serif;
+}
 .table-row {
   display: table-row;
 }
@@ -47,9 +56,13 @@ h2 {
 .about {
   text-align: center;
   position: fixed;
-  z-index: 0;
+  z-index: 1;
 }
 
+#back {
+  position: relative;
+  z-index: 2;
+}
 h3 {
   padding-top: 30px;
 }
@@ -61,9 +74,9 @@ h3 {
   /* display: none; */
 }
 
-.rank-container {
+/* .rank-container {
   background-color: red;
-}
+} */
 
 #measureSize {
   position: fixed;
@@ -72,10 +85,15 @@ h3 {
 canvas[data-engine*="three.js"] {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: -1 !important;
 }
 
 button {
   position: relative;
   z-index: 1;
+  font-family: "Oswald", sans-serif;
+}
+
+p {
+  font-family: "Oswald", sans-serif;
 }

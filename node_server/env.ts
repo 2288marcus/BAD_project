@@ -7,9 +7,9 @@ export const env = {
   NODE_ENV: "development",
   DB_HOST: "localhost",
   DB_PORT: 5432,
-  DB_NAME: "m3project",
-  DB_USERNAME: "USERNAME",
-  DB_PASSWORD: "PASSWORD",
+  DB_NAME: "",
+  DB_USERNAME: "",
+  DB_PASSWORD: "",
 };
 
 populateEnv(env, { mode: "halt" });

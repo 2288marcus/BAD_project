@@ -4,42 +4,51 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Main</title>
-    <style>
-      #rankDialog {
-        position: fixed;
-        inset: 50%;
-        width: 1px;
-        height: 1px;
-        transition: all 0.5s;
-        overflow: hidden;
-        padding: 0;
-      }
-      #rankDialog.open {
-        inset: 0;
-        width: 100%;
-        height: 100%;
-      }
-      #rankIFrame {
-        width: 100%;
-        height: 100%;
-      }
-    </style>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
       crossorigin="anonymous"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe&family=Bungee+Spice&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Main</title>
+  </head>
+  <style>
+    #rankDialog {
+      position: fixed;
+      inset: 50%;
+      width: 1px;
+      height: 1px;
+      transition: all 0.5s;
+      overflow: hidden;
+      padding: 0;
+    }
+    #rankDialog.open {
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    #rankIFrame {
+      width: 100%;
+      height: 100%;
+    }
+    #close-btn {
+      z-index: 1 !important;
+    }
+  </style>
+  <body>
+    <div id="measureSize"></div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
       crossorigin="anonymous"
     ></script>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <picture>The cup</picture>
     <script
       async
       src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"
@@ -51,11 +60,10 @@
         }
       }
     </script>
-    <div id="measureSize"></div>
     <script type="module" src="/js/index_model.js"></script>
     <h1>
-      <p>珍音功</p>
-      <p>Pretty Pitied Bitch</p>
+      <p id="index_h1">珍音功</p>
+      <p id="index_h1">Pretty Pitied Bitch</p>
     </h1>
     <h1>Game mode</h1>
     <div class="btn-row">
@@ -75,7 +83,7 @@
     <h1>
       <button class="btn btn-outline-light" onclick="showRank()">Rank</button>
       <dialog id="rankDialog">
-        <button onclick="hideRank()">close</button>
+        <button id="close-btn" onclick="hideRank()">close</button>
         <br />
         <iframe style="border: 0" id="rankIFrame"></iframe>
       </dialog>
@@ -85,12 +93,15 @@
         ><button class="btn btn-outline-light">About</button></a
       >
     </h1>
+
     <script>
       function hideRank() {
+        console.log("hidden rank");
         rankDialog.classList.remove("open");
-        setTimeout(() => {
-          rankDialog.open = false;
-        }, 500);
+        rankDialog.open = false;
+        // setTimeout(() => {
+        //   rankDialog.open = false;
+        // }, 500);
       }
       function showRank() {
         rankDialog.open = true;
