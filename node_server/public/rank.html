@@ -19,46 +19,63 @@
     <link rel="stylesheet" href="style.css" />
     <style>
       .line {
-        border-left: 1px solid #9a9a9a;
+        border-left: 1.3px solid #ffffff9b;
+      }
+      tr {
+        justify-self: center;
       }
       th,
       td {
-        border-left-width: 100px;
-        border-color: black;
+        border-color: rgba(0, 0, 0, 0);
         text-align: center;
       }
       td {
-        border-left-width: 10px;
+        border-left-width: 60px;
+        border-right-width: 60px;
+        border-top-width: 13px;
+      }
+
+      body {
+        overflow: auto;
+      }
+
+      .table-container {
+        display: flex;
+        justify-content: space-around;
+        margin: 27px;
+        border: 10px;
       }
     </style>
   </head>
   <body>
     <h1>Rank</h1>
-    <table>
-      <thead>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th rowspan="2">Rank</th>
+            <th colspan="2">5 Cup</th>
+            <th colspan="2">1 Minute</th>
+          </tr>
+          <tr>
+            <th>Time</th>
+            <th>Player</th>
+            <th>Glass</th>
+            <th>Player</th>
+          </tr>
+        </thead>
+        <tbody data-template="row" id="rankTBody" data-bind="rows"></tbody>
+      </table>
+      <template data-name="row">
         <tr>
-          <th rowspan="2">Rank</th>
-          <th colspan="2">5 Cup</th>
-          <th colspan="2">1 Minute</th>
+          <td data-text="no">1</td>
+          <td class="line" data-text="time_spending_value">1:00</td>
+          <td data-text="time_spending_player">Alice</td>
+          <td class="line" data-text="score_value">123</td>
+          <td data-text="score_player">Bob</td>
         </tr>
-        <tr>
-          <th>Time</th>
-          <th>Player</th>
-          <th>Glass</th>
-          <th>Player</th>
-        </tr>
-      </thead>
-      <tbody data-template="row" id="rankTBody" data-bind="rows"></tbody>
-    </table>
-    <template data-name="row">
-      <tr>
-        <td data-text="no">1</td>
-        <td class="line" data-text="time_spending_value">1:00</td>
-        <td data-text="time_spending_player">Alice</td>
-        <td class="line" data-text="score_value">123</td>
-        <td data-text="score_player">Bob</td>
-      </tr>
-    </template>
+      </template>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/data-template@1.7/base.js"></script>
     <script>
       function formateTime(time) {
