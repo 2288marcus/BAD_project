@@ -7,7 +7,7 @@ let loadedModels = [];
 let hitTestSource = null;
 let hitTestSourceRequested = false;
 let glass = {};
-let isMatch = false;
+// let isMatch = false;
 
 window.glass = glass;
 let firstModel;
@@ -54,9 +54,14 @@ renderer.xr.enabled = true;
 // 将渲染器的画布添加到HTML页面中
 document.body.appendChild(renderer.domElement);
 // 添加AR按钮，用于启用AR功能
-document.body.appendChild(
-  ARButton.createButton(renderer, { requiredFeatures: ["hit-test"] })
-);
+let startButton = ARButton.createButton(renderer, {
+  requiredFeatures: ["hit-test"],
+});
+document.body.appendChild(startButton);
+startButton.addEventListener("click", () => {
+  scene.remove(firstModel);
+  firstModel = null;
+});
 
 let controller = renderer.xr.getController(0);
 // controller.addEventListener("select", onSelect);
@@ -146,7 +151,7 @@ function addGlassModelToScene(model) {
 
   if (isMatch) {
     animate();
-    // isMatched();
+    matched();
     console.log("animate playing");
     isMatch = false;
   }
@@ -158,8 +163,8 @@ document.querySelector("#play").addEventListener("click", () => {
 document.querySelector("#create").addEventListener("click", () => {
   if (firstModel) {
     firstModel.mixer.stopAllAction(); // 暂停所有动画
-    scene.remove(firstModel);
-    firstModel = null;
+    // scene.remove(firstModel);
+    // firstModel = null;
     // countdownTimer();
   }
   onSelect();

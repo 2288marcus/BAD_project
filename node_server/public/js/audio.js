@@ -233,7 +233,7 @@ function matchFreq(dominantFreq, randomFreq) {
 
 function matched() {
   //TODO cup falls
-  //   isMatch = true;
+  isMatch = true;
   //   animate();
 
   disableMic();

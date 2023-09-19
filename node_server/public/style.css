@@ -208,3 +208,10 @@ button {
 
   z-index: 1;
 }
+
+#create {
+  position: fixed;
+  top: 50%;
+  left: 49%;
+  width: 5rem;
+}
