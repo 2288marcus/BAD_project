@@ -186,9 +186,9 @@ function indexToFreq(index, sampleRate, fftBins) {
   const binWidth = sampleRate / fftBins;
 
   // console.log('#bin width:', binWidth);
-  console.log("*domFreq*:", (index * binWidth) / 2);
+  console.log("*domFreq*:", (index * binWidth) / 2) * 1.002;
 
-  return (index * binWidth) / 2;
+  return ((index * binWidth) / 2) * 1.002;
 }
 
 function genRandomNote() {
