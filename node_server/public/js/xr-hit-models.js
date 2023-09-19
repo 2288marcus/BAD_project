@@ -206,14 +206,17 @@ function render(timestamp, frame) {
         // document.getElementById("timer").style.display = "none";
       } else {
         // document.getElementById("counterSpan").style.display = "block";
-        document.getElementById("timer").style.display = "block";
+        // document.getElementById("timer").style.display = "block";
         document.getElementById("play").style.display = "block";
         document.getElementById("create").style.display = "block";
         document.querySelector(".canvas-container").style.display = "block";
         document.querySelector(".listen").style.display = "block";
         document.querySelector("#restart").style.display = "block";
         document.querySelector("#match-note").style.display = "block";
-        document.querySelector("#matchTest").style.display = "block";
+        document.querySelector("#matchTest").style.opacity = "1";
+        document.querySelector(".notePlay").style.opacity = "1";
+        document.querySelector(".hz").style.opacity = "1";
+        // document.querySelector(".d-flex").style.display = "flex";
       }
     }
 

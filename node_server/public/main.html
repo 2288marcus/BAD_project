@@ -28,7 +28,7 @@
       Back
     </button></a>
   <!-- <div class="timer-container" id="timer">01:00:000</div> -->
-  <button class="btn btn-outline-light" id="counterSpan">0</button>
+  <!-- <button class="btn btn-outline-light" id="counterSpan">0</button> -->
   <button class="btn btn-outline-light" id="play">play</button>
   <button class="btn btn-outline-light" id="create">create</button>
 
@@ -37,12 +37,17 @@
     <div id="timer">01:00:00</div>
     <div id="cup-counter">0 Cup</div>
   </div>
+
+  <div class="d-flex">
+
+    <button class="testing" id="matchTest" onclick="matched()">testing: match</button>
+    <button class="testing" onclick="endGame()">testing: end game</button>
+    <button class="testing" id="randomLor">random</button>
+  </div>
+
   <div id="restart" onclick="restart()"> Restart</div>
 
-  <button id="matchTest" onclick="matched()">testing: match</button>
-  <button onclick="endGame()">testing: end game</button>
 
-  <button id="randomLor">random</button>
   <div class="d-flex">
     <div class="canvas-container"></div>
   </div>
@@ -59,7 +64,7 @@
     <div class="matchStatus">Ready</div>
   </div>
   <button class="listen" onclick="startMic()">Sing it!</button>
-  <button id="startButton">Start Microphone</button>
+  <!-- <button id="startButton">Start Microphone</button> -->
 
 
   <script>
