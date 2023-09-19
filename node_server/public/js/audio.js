@@ -233,7 +233,7 @@ function matchFreq(dominantFreq, randomFreq) {
 
 function matched() {
   //TODO cup falls
-  isMatch = true;
+
   //   animate();
 
   disableMic();
@@ -254,7 +254,9 @@ function matched() {
     document.querySelector("#match-note").classList.remove("fade");
   }, 3000);
 
-  matchStatusBar.innerText = "You are perfect!";
+  matchStatusBar.innerText = "You are perfect!!!";
+  // alert("perfect");
+  isMatch = true;
   matchStatusBar.style.fontSize = "2rem";
 
   setTimeout(() => {
@@ -312,6 +314,10 @@ async function playerForm() {
 
   if (username) {
     Swal.fire(`Name: ${username}\n Score: ${cupCounter} Cups`);
+
+    await fetch(`/gameResult?username=${username}&&score=${cupCounter * 100}`, {
+      method: "POST",
+    });
   }
 }
 

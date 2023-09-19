@@ -151,8 +151,8 @@ function addGlassModelToScene(model) {
 
   if (isMatch) {
     animate();
-    matched();
-    console.log("animate playing");
+    // matched();
+    // alert("animate playing");
     isMatch = false;
   }
 }
@@ -206,7 +206,7 @@ function render(timestamp, frame) {
         // document.getElementById("timer").style.display = "none";
       } else {
         // document.getElementById("counterSpan").style.display = "block";
-        // document.getElementById("timer").style.display = "block";
+        // document.getElementById("back").style.display = "block";
         document.getElementById("play").style.display = "block";
         document.getElementById("create").style.display = "block";
         document.querySelector(".canvas-container").style.display = "block";
