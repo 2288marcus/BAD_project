@@ -4,6 +4,7 @@ import { HttpError } from "./http.error";
 import { knex } from "./db";
 import { GameService } from "./game.service";
 import { GameController } from "./game.controller";
+import { env } from "./env";
 // import cors from "cors";
 
 let app = express();
@@ -46,7 +47,7 @@ let errorHandler: ErrorRequestHandler = (err: HttpError, req, res, next) => {
 
 app.use(errorHandler);
 
-let port = 8100;
+let port = env.WEB_PORT;
 app.listen(port, () => {
   print(port);
 });

@@ -10,6 +10,7 @@ export const env = {
   DB_NAME: "",
   DB_USERNAME: "",
   DB_PASSWORD: "",
+  WEB_PORT: 8100,
 };
 
 populateEnv(env, { mode: "halt" });
