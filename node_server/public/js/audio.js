@@ -234,7 +234,7 @@ function matchFreq(dominantFreq, randomFreq) {
 function matched() {
   //TODO cup falls
   isMatch = true;
-  //   animate();
+  animate();
 
   disableMic();
   console.log("mic disable ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");

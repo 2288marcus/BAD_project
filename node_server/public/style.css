@@ -153,8 +153,13 @@ p {
 
 #cup-counter {
   position: fixed;
+<<<<<<< HEAD
   top: 1.85rem;
   right: 0.3rem;
+=======
+  top: 5.5%;
+  right: 1rem;
+>>>>>>> refs/remotes/origin/main
   text-align: center;
   font-size: 1.8rem;
   color: #fffef9;
