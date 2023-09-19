@@ -177,7 +177,7 @@ p {
 }
 
 button {
-  margin: 0.25rem;
+  margin: 0.2rem;
 }
 
 #match-note {
@@ -245,4 +245,15 @@ button {
   position: relative;
   top: 6.25rem;
   margin-left: 1rem;
+}
+
+.bi {
+  position: fixed;
+  bottom: 8rem;
+  color: #deffdf;
+  font-size: 3rem;
+
+  z-index: 3;
+
+  pointer-events: none;
 }

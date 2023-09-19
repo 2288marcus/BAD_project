@@ -28,7 +28,8 @@ function setup() {
 
   // cup.parent(document.querySelector("#canvas"));
 
-  cup.background("#deffdf");
+  // cup.background("#deffdf");
+  cup.background(0, 0, 0, 0);
 
   mic = new p5.AudioIn();
   console.log("mic:", mic);
@@ -46,7 +47,8 @@ function setup() {
 }
 
 function draw() {
-  background("#deffdf");
+  // background("#deffdf");
+  background(0, 0, 0, 0);
 
   dominantFreq = getDominantFrequency();
 
