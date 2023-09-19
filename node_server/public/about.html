@@ -1,63 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-      crossorigin="anonymous"
-    ></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe&family=Bungee+Spice&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <script
-      async
-      src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"
-    ></script>
-    <script type="importmap">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe&family=Bungee+Spice&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200&family=Righteous&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: "Righteous", cursive;
+      overflow: auto;
+      padding: 5%;
+
+    }
+
+    p {
+      font-size: 1.75rem;
+
+    }
+
+    h1 {
+      font-size: 3rem;
+
+
+    }
+  </style>
+</head>
+
+<body>
+  <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+  <script type="importmap">
       {
         "imports": {
           "three": "https://unpkg.com/three@0.147.0/build/three.module.js"
         }
       }
     </script>
-    <div id="measureSize"></div>
-    <script type="module" src="/js/index_model.js"></script>
-    <a href="index.html"
-      ><button class="btn btn-outline-light" id="back" style="float: right">
-        Back
-      </button></a
-    >
-    <h1>About</h1>
-    <h2>(How to play)</h2>
-    <div class="about">
-      <h3>1 Minute</h3>
-      <p>Push over as many wineglasses as possible within one minute.</p>
-      <h3>5 cup</h3>
-      <p>Push over five wineglasses as quickly as possible.</p>
-      <h3>Challenge</h3>
-      <p>Communicate with your friend.</p>
-      <h3>Practice</h3>
-      <p>Just practice...</p>
-      <h3>Presented by</h3>
-      <p>Tevin / Marcus / Kasey</p>
-      <h3>Special thanks</h3>
-      <p>Beeno / Janice / Tecky</p>
-    </div>
-  </body>
+  <div id="measureSize"></div>
+  <script type="module" src="/js/index_model.js"></script>
+  <a href="index.html"><button class="btn btn-outline-light" id="back" style="float: right">
+      Back
+    </button></a>
+  <h1>About</h1>
+  <h2>(How to play)</h2>
+  <!-- <div class="about"> -->
+  <h3>1 Minute</h3>
+  <p>Push over as many wineglasses as possible within one minute.</p>
+  <h3>5 cup</h3>
+  <p>Push over five wineglasses as quickly as possible.</p>
+  <h3>Challenge</h3>
+  <p>Communicate with your friend.</p>
+  <h3>Practice</h3>
+  <p>Just practice...</p>
+  <h3>Presented by</h3>
+  <p>Tevin / Marcus / Kasey</p>
+  <h3>Special thanks</h3>
+  <p>Beeno / Janice / Tecky</p>
+  <!-- </div> -->
+</body>
+
 </html>

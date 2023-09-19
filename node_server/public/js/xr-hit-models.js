@@ -214,9 +214,8 @@ function render(timestamp, frame) {
         document.querySelector("#restart").style.display = "block";
         document.querySelector("#match-note").style.display = "block";
         document.querySelector("#matchTest").style.opacity = "1";
-        document.querySelector(".notePlay").style.opacity = "1";
-        document.querySelector(".hz").style.opacity = "1";
-        // document.querySelector(".d-flex").style.display = "flex";
+        document.querySelector(".notePlay").style.display = "block";
+        document.querySelector(".hz").style.display = "block";
       }
     }
 

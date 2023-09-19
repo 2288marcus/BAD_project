@@ -52,7 +52,8 @@ h2 {
 
 .about {
   text-align: center;
-  position: fixed;
+  font-size: 2.5rem;
+  /* position: fixed; */
   z-index: 1;
 }
 
@@ -226,12 +227,18 @@ button {
   border-radius: 100%;
 }
 
+.text {
+  position: fixed;
+  top: 30%;
+  left: 5%;
+}
+
 .hz {
-  opacity: 0;
+  top: 35%;
 }
 
 .notePlay {
-  opacity: 0;
+  top: 37%;
 }
 
 .testing {
