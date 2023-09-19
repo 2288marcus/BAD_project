@@ -52,7 +52,8 @@ h2 {
 
 .about {
   text-align: center;
-  position: fixed;
+  font-size: 2.5rem;
+  /* position: fixed; */
   z-index: 1;
 }
 
@@ -115,16 +116,19 @@ p {
   width: 100vw;
 
   position: fixed;
-  bottom: 3.75rem;
-  margin-left: 99px;
-  margin-right: 99px;
+  bottom: 10%;
+  margin-left: 25%;
+  margin-right: 25%;
+
+  display: "block";
 
   /* z-index: 100; */
 }
 
 #timer {
   position: fixed;
-  top: 2.5rem;
+  right: 30%;
+  top: 2rem;
 
   font-size: 2rem;
   text-align: center;
@@ -135,6 +139,10 @@ p {
 }
 
 #restart {
+  position: fixed;
+  top: 4rem;
+  right: 40%;
+
   text-align: center;
   color: #deffdf;
   text-shadow: -4px 2px 2px rgba(54, 63, 49, 1);
@@ -146,8 +154,8 @@ p {
 
 #cup-counter {
   position: fixed;
-  top: 5.5%;
-  right: 1rem;
+  top: 1.85rem;
+  right: 0.3rem;
   text-align: center;
   font-size: 1.8rem;
   color: #fffef9;
@@ -169,7 +177,7 @@ p {
 }
 
 button {
-  margin: 0.25rem;
+  margin: 0.2rem;
 }
 
 #match-note {
@@ -211,7 +219,41 @@ button {
 
 #create {
   position: fixed;
-  top: 50%;
-  left: 49%;
-  width: 5rem;
+  top: 43%;
+  left: 39%;
+  width: 6rem;
+  height: 6rem;
+  opacity: 0;
+  border-radius: 100%;
+}
+
+.text {
+  position: fixed;
+  top: 30%;
+  left: 5%;
+}
+
+.hz {
+  top: 35%;
+}
+
+.notePlay {
+  top: 37%;
+}
+
+.testing {
+  position: relative;
+  top: 6.25rem;
+  margin-left: 1rem;
+}
+
+.bi {
+  position: fixed;
+  bottom: 8rem;
+  color: #deffdf;
+  font-size: 3rem;
+
+  z-index: 3;
+
+  pointer-events: none;
 }

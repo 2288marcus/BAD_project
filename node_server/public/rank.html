@@ -1,114 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rank</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-      crossorigin="anonymous"
-    ></script>
-    <link rel="stylesheet" href="style.css" />
-    <style>
-      .line {
-        border-left: 1.3px solid #ffffff9b;
-      }
-      tr {
-        justify-self: center;
-      }
-      th,
-      td {
-        border-color: rgba(0, 0, 0, 0);
-        text-align: center;
-      }
-      td {
-        border-left-width: 60px;
-        border-right-width: 60px;
-        border-top-width: 13px;
-      }
 
-      body {
-        overflow: auto;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rank</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200&family=Righteous&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
 
-      .table-container {
-        display: flex;
-        justify-content: space-around;
-        margin: 27px;
-        border: 10px;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Rank</h1>
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th rowspan="2">Rank</th>
-            <th colspan="2">5 Cup</th>
-            <th colspan="2">1 Minute</th>
-          </tr>
-          <tr>
-            <th>Time</th>
-            <th>Player</th>
-            <th>Glass</th>
-            <th>Player</th>
-          </tr>
-        </thead>
-        <tbody data-template="row" id="rankTBody" data-bind="rows"></tbody>
-      </table>
-      <template data-name="row">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .line {
+      border-left: 1.3px solid #ffffff9b;
+    }
+
+    tr {
+      justify-self: center;
+    }
+
+    th,
+    td {
+      border-color: rgba(0, 0, 0, 0);
+      text-align: center;
+    }
+
+    td {
+      border-left-width: 60px;
+      border-right-width: 60px;
+      border-top-width: 13px;
+    }
+
+    body {
+      overflow: auto;
+    }
+
+    .table-container {
+      display: flex;
+      justify-content: space-around;
+      margin: 27px;
+      border: 10px;
+    }
+
+    button {
+      font-family: "Righteous", cursive;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Rank</h1>
+  <div class="table-container">
+    <table>
+      <thead>
         <tr>
-          <td data-text="no">1</td>
-          <td class="line" data-text="time_spending_value">1:00</td>
-          <td data-text="time_spending_player">Alice</td>
-          <td class="line" data-text="score_value">123</td>
-          <td data-text="score_player">Bob</td>
+          <th rowspan="2">Rank</th>
+          <th colspan="2">5 Cup</th>
+          <th colspan="2">1 Minute</th>
         </tr>
-      </template>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/data-template@1.7/base.js"></script>
-    <script>
-      function formateTime(time) {
-        if (!time) return "";
+        <tr>
+          <th>Time</th>
+          <th>Player</th>
+          <th>Glass</th>
+          <th>Player</th>
+        </tr>
+      </thead>
+      <tbody data-template="row" id="rankTBody" data-bind="rows"></tbody>
+    </table>
+    <template data-name="row">
+      <tr>
+        <td data-text="no">1</td>
+        <td class="line" data-text="time_spending_value">1:00</td>
+        <td data-text="time_spending_player">Alice</td>
+        <td class="line" data-text="score_value">123</td>
+        <td data-text="score_player">Bob</td>
+      </tr>
+    </template>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/data-template@1.7/base.js"></script>
+  <script>
+    function formateTime(time) {
+      if (!time) return "";
 
-        time = Number(time);
-        var h = Math.floor(time / 3600);
-        var m = Math.floor((time % 3600) / 60);
-        var s = Math.floor((time % 3600) % 60);
+      time = Number(time);
+      var h = Math.floor(time / 3600);
+      var m = Math.floor((time % 3600) / 60);
+      var s = Math.floor((time % 3600) % 60);
 
-        var hDisplay = h > 0 ? h + (h == 1 ? " Hour, " : " Hour, ") : "";
-        var mDisplay = m > 0 ? m + (m == 1 ? " Min, " : " Min, ") : "";
-        var sDisplay = s > 0 ? s + (s == 1 ? " Sec" : " Sec") : "";
-        return hDisplay + mDisplay + sDisplay;
+      var hDisplay = h > 0 ? h + (h == 1 ? " Hour, " : " Hour, ") : "";
+      var mDisplay = m > 0 ? m + (m == 1 ? " Min, " : " Min, ") : "";
+      var sDisplay = s > 0 ? s + (s == 1 ? " Sec" : " Sec") : "";
+      return hDisplay + mDisplay + sDisplay;
+    }
+
+    getJSON("/gameRank", (json) => {
+      let n = Math.max(json.fiveCupdata.length, json.oneMinuteData.length);
+      // json.fiveCupdata.pop();
+      let rows = [];
+      for (let i = 0; i < n; i++) {
+        rows.push({
+          no: i + 1,
+          time_spending_value: formateTime(
+            json.fiveCupdata[i]?.time_spending
+          ),
+          time_spending_player: json.fiveCupdata[i]?.username || "",
+          score_value: json.oneMinuteData[i]?.user_score || "",
+          score_player: json.oneMinuteData[i]?.username || "",
+        });
       }
+      renderTemplate(rankTBody, { rows });
+    });
+  </script>
+</body>
 
-      getJSON("/gameRank", (json) => {
-        let n = Math.max(json.fiveCupdata.length, json.oneMinuteData.length);
-        // json.fiveCupdata.pop();
-        let rows = [];
-        for (let i = 0; i < n; i++) {
-          rows.push({
-            no: i + 1,
-            time_spending_value: formateTime(
-              json.fiveCupdata[i]?.time_spending
-            ),
-            time_spending_player: json.fiveCupdata[i]?.username || "",
-            score_value: json.oneMinuteData[i]?.user_score || "",
-            score_player: json.oneMinuteData[i]?.username || "",
-          });
-        }
-        renderTemplate(rankTBody, { rows });
-      });
-    </script>
-  </body>
 </html>

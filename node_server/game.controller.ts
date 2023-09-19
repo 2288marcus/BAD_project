@@ -1,6 +1,7 @@
 import { Request, Router } from "express";
 import { GameService } from "./game.service";
 
+
 export class GameController {
   router = Router();
   constructor(private gameService: GameService) {
@@ -29,7 +30,13 @@ export class GameController {
   }
 
   async gameResult(req: Request) {
-    let data = await this.gameService.gameResult();
+    let { username, score } = req.query
+    console.log({ username, score });
+    if (!username || !score) {
+      return {}
+    }
+
+    let data = await this.gameService.gameResult(username.toString(), +score);
     return data;
   }
 }

@@ -151,8 +151,8 @@ function addGlassModelToScene(model) {
 
   if (isMatch) {
     animate();
-    matched();
-    console.log("animate playing");
+    // matched();
+    // alert("animate playing");
     isMatch = false;
   }
 }
@@ -201,19 +201,21 @@ function render(timestamp, frame) {
         session.isARSession && session.isARSessionStarted;
 
       // 根据AR会话的状态显示或隐藏播放按钮
-      if (isARSessionStarted) {
+      if (!isARSessionStarted) {
         // document.getElementById("counterSpan").style.display = "none";
         // document.getElementById("timer").style.display = "none";
-      } else {
+
         // document.getElementById("counterSpan").style.display = "block";
-        document.getElementById("timer").style.display = "block";
+        // document.getElementById("back").style.display = "block";
         document.getElementById("play").style.display = "block";
         document.getElementById("create").style.display = "block";
         document.querySelector(".canvas-container").style.display = "block";
         document.querySelector(".listen").style.display = "block";
         document.querySelector("#restart").style.display = "block";
         document.querySelector("#match-note").style.display = "block";
-        document.querySelector("#matchTest").style.display = "block";
+        document.querySelector("#matchTest").style.opacity = "1";
+        document.querySelector(".notePlay").style.display = "block";
+        document.querySelector(".hz").style.display = "block";
       }
     }
 
